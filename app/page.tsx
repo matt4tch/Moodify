@@ -69,17 +69,18 @@ export default function AIPromptChat() {
 
         {/* Character Details Section */}
         {selectedCharacter !== 'Default' && currentCharacter && (
-          <div className="absolute bottom-20 left-6 flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm">
+          <div className="flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm 
+                  sm:absolute sm:bottom-20 sm:left-6 sm:flex-row flex flex-col sm:max-w-sm max-w-full">
             <img
               src={currentCharacter.imageUrl}
               alt={currentCharacter.name}
-              className="w-16 h-16 rounded-full object-cover"
+              className="w-16 h-16 rounded-full object-cover sm:mb-0 mb-4"
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col text-center sm:text-left">
               <p className="text-lg font-bold text-gray-700">{currentCharacter.name}</p>
               <p className="text-sm text-gray-600 italic">{currentCharacter.description}</p>
             </div>
-          </div>
+         </div>
         )}
 
         {/* Right Sidebar */}
