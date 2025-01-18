@@ -86,4 +86,4 @@ export default function AIPromptChat() {
       </div>
     </div>
   );
-  
+}
