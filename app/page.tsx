@@ -62,6 +62,7 @@ export default function AIPromptChat() {
   const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
 
 const testApiService = async () => {
     try {
@@ -96,7 +97,8 @@ const testApiService = async () => {
        const response = aiService(prompt, input);
        console.log("AI Response:", response)
     } else {
-      aiService(prompt, input);
+      let input_context = ""
+      aiService(input_context, input);
     }
   };
 
