@@ -22,6 +22,7 @@ export default function AIPromptChat() {
   const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
 
   const testApiService = async () => {
     try {
@@ -49,14 +50,21 @@ export default function AIPromptChat() {
     (character) => character.name === selectedCharacter
   );
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedCharacter) {
       let input_context = ""
       aiService(input_context, input)
     } else {
       let input_context = ""
-      aiService(input_context, input);
+      const response = await aiService(input_context, input);
+      if (!response) {
+        console.log('Null response from AI');
+        return;
+      }
+      console.log('AI Response:', response);
+      //setAiResponse(response);
+
     }
   };
 
