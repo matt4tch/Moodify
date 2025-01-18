@@ -105,10 +105,10 @@ export default function AIPromptChat() {
       <header className="text-blue-500 text-center py-4">
         <h1 className="text-3xl font-bold">PosiLog</h1>
       </header>
-
+  
       {/* Main Layout - Split into three sections */}
       <div className="flex flex-grow space-x-6 p-4">
-        
+  
         {/* Left Section: Calendar and Character Description */}
         <div className="flex flex-col w-full sm:w-1/4 space-y-6">
           <div className="w-full">
@@ -131,7 +131,7 @@ export default function AIPromptChat() {
               }
             />
           </div>
-
+  
           {selectedCharacter !== "Default" && currentCharacter && (
             <div className="bg-gray-200 rounded-lg p-4 shadow-md w-full">
               <div className="flex items-center space-x-4">
@@ -152,13 +152,10 @@ export default function AIPromptChat() {
             </div>
           )}
         </div>
-
+  
         {/* Middle Section: Text Box and Submit Button */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4 space-y-6">
-          <form
-            onSubmit={onSubmit}
-            className="flex flex-col w-full h-full"
-          >
+          <form onSubmit={onSubmit} className="flex flex-col w-full h-full">
             <textarea
               value={input}
               onChange={handleInputChange}
@@ -175,7 +172,7 @@ export default function AIPromptChat() {
             </Button>
           </form>
         </div>
-
+  
         {/* Right Section: Character Menu Sidebar */}
         <div className="flex flex-col w-full sm:w-1/4">
           <CharacterSidebar
@@ -183,8 +180,9 @@ export default function AIPromptChat() {
             selectedCharacter={selectedCharacter}
           />
         </div>
-
+  
       </div>
     </div>
   );
+  
 }
