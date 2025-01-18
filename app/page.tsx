@@ -11,7 +11,7 @@ const characters = [
   { id: 2, name: 'Eminem', imageUrl: '/Eminem.png' },
   { id: 3, name: 'Costco Guys', imageUrl: '/Costco Guys.png' },
   { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
-  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.webp' },
+  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.png' },
   { id: 6, name: 'Mike Tyson', imageUrl: '/mike.png' },
 ];
 
