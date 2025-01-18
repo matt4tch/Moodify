@@ -92,24 +92,24 @@ export default function AIPromptChat() {
       <div className="flex flex-grow relative">
         {/* Center Chat Form */}
         <main className="flex-grow flex items-center justify-center p-4">
-          <div className="flex flex-col items-center">
-            <DayPicker
-                mode="single"
-                selected={selected}
-                onSelect={setSelected}
-                className="border rounded-lg bg-white shadow-sm p-3 scale-90 transform -translate-x-10"
-                disabled={ { after: new Date() } }
-                footer={
-                  selected ? (
-                      <p className="text-sm text-gray-600 mt-2">
-                        {selected.toLocaleDateString()}
-                      </p>
-                  ) : (
-                      <p className="text-sm text-gray-600 mt-2">Pick a day</p>
-                  )
-                }
-                />
-          </div>
+        <div className="fixed top-6 left-6">
+          <DayPicker
+            mode="single"
+            selected={selected}
+            onSelect={setSelected}
+            className="border rounded-lg bg-white shadow-sm p-3"
+            disabled={{ after: new Date() }}
+            footer={
+              selected ? (
+              <p className="text-sm text-gray-600 mt-2">
+              {selected.toLocaleDateString()}
+              </p>
+              ) : (
+              <p className="text-sm text-gray-600 mt-2">Pick a day</p>
+              )
+            }
+          />
+        </div>
           <form
               onSubmit={onSubmit}
               className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
