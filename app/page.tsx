@@ -6,13 +6,13 @@ import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
 
 const characters = [
-  { id: 0, name: 'Default', imageUrl: '/images/default.png' },
-  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordon Ramsay.webp' },
-  { id: 2, name: 'Eminem', imageUrl: '/Eminem.png' },
-  { id: 3, name: 'Costco Guys', imageUrl: '/Costco Guys.png' },
-  { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
-  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.png' },
-  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.png' },
+  { id: 0, name: 'Default', imageUrl: '/images/default.png', description: "" },
+  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordon%20Ramsay.webp', description: "The most famous chef in the world has descended from his culinary haven to help make your day just that much better. All while not calling you an idiot sandwich." },
+  { id: 2, name: 'Eminem', imageUrl: '/Eminem.png', description: "Making your day, stay out of the gray, for zero pay. Once you talk to me, I’ll make you feel like a G, and again, it's for free." },
+  { id: 3, name: 'Costco Guys', imageUrl: '/Costco%20Guys.png', description: "We bring the BOOM to your life, which will make you smile as much as we smile when we see the DOUBLE CHUNK CHOCOLATE COOKIE!" },
+  { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp', description: "RAWRRR! Your bad vibes just got stomped." },
+  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.webp', description: "He narrates your life so smoothly, even your problems sound inspiring." },
+  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.png', description: "Knocks out negativity like it's a title fight—and you’re winning, champ!" },
 ];
 
 export default function AIPromptChat() {
@@ -51,6 +51,7 @@ export default function AIPromptChat() {
                 className="w-24 h-auto object-contain rounded-md"
               />
               <p className="mt-2 text-sm font-bold text-center">{currentCharacter.name}</p>
+              <p className="text-xs text-center text-gray-600">{currentCharacter.description}</p>
             </>
           )}
         </div>
