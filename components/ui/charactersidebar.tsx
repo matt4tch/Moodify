@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const characters = [
-  { id: 1, name: 'Sherlock Holmes' },
-  { id: 2, name: 'Gandalf' },
-  { id: 3, name: 'Iron Man' },
-  { id: 4, name: 'Hermione Granger' },
-  { id: 5, name: 'Captain Picard' },
+  { id: 1, name: 'Gordon Ramsay' },
+  { id: 2, name: 'Eminem' },
+  { id: 3, name: 'Costco Guys' },
+  { id: 4, name: 'Bowser' },
+  { id: 5, name: 'Morgan Freeman' },
+  { id: 6, name: 'Mike Tyson' },
 ]
 
 export function CharacterSidebar({ 
