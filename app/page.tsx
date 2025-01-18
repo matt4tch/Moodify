@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useChat } from 'ai/react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
+import aiService from '../lib/aiService';
 
 const characters = [
   { id: 0, name: 'Default', imageUrl: '/images/default.png', description: "" },
@@ -16,7 +17,7 @@ const characters = [
 ];
 
 export default function AIPromptChat() {
-  const { input, handleInputChange, handleSubmit } = useChat();
+  const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
 
   const currentCharacter = characters.find(
@@ -26,9 +27,11 @@ export default function AIPromptChat() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedCharacter) {
-      handleSubmit(e, { options: { body: { character: selectedCharacter } } });
+      let input_context = ""
+      aiService(input_context, input)
     } else {
-      handleSubmit(e);
+      let input_context = ""
+      aiService(input_context, input);
     }
   };
 
