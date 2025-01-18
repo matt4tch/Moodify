@@ -7,6 +7,10 @@ import { DayPicker } from 'react-day-picker';
 import { debounce } from 'lodash';
 import "react-day-picker/style.css";
 import { setDefaultAutoSelectFamily } from 'net';
+import aiService from '../lib/aiService';
+
+
+const prompt = "You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity. Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows the user to continue reflecting more positively on their day. Make it short. Just a few words. Max 5 words. Examples: Input: 'Im having a very bad day and I' Output: 'am trying to make it better by' Input: 'I failed my exam and now I feel like' Output: 'I have a chance to learn from my mistakes and' Input: 'Im worried about my future and I' Output: 'know that taking small steps today that' Now, complete the following sentence in a positive and supportive way: [Your Input]";
 
 
 const characters = [
@@ -41,6 +45,7 @@ const characters = [
 ];
 
 export default function AIPromptChat() {
+  const suggestionRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [summaryCharacter, setSummaryCharacter] = useState<string | null>('Default');
@@ -50,6 +55,9 @@ export default function AIPromptChat() {
   const [aiSuggestion, setAiSuggestion] = useState('');
 
   const getSuggestion = async (text : string) => {
+    if (!text) {
+      return;
+    }
     const response = await aiService(prompt, text, "gpt-4o-mini");
     console.log("AI Autocomplete Response:", response);
     if (response) {
@@ -58,7 +66,8 @@ export default function AIPromptChat() {
 
   } 
 
-  const debounceGetSuggestion = debounce(getSuggestion, 5000, { leading: false, trailing: true });
+  //const debounceGetSuggestion = debounce(getSuggestion, 500, { leading: false, trailing: true });
+  const debounceGetSuggestion = useRef(debounce(getSuggestion, 1000, { leading: false, trailing: true })).current;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setInput(e.target.value);
@@ -179,7 +188,26 @@ export default function AIPromptChat() {
               onChange={handleInputChange}
               placeholder="What would you like to reflect on today?"
               className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
+              style={{ position: 'relative', zIndex: 2 }} // Keep the user's text above the suggestion
             />
+
+            {aiSuggestion && input && (
+                    <div
+                      className='font-mono text-lg '
+                      style={{
+                        position: 'absolute',
+                        top: '92px',
+                        left: '382px', // Adjust for the length of the input
+                        color: 'grey',
+                        paddingLeft: '10px',
+                        paddingTop: '10px',
+                        pointerEvents: 'none', // Makes sure you can't edit the suggestion
+                      }}
+                    >
+                      {input + aiSuggestion} {/* Show suggestion after user's input */}
+                    </div>
+            )}
+
             <Button
               type="submit"
               className="w-full py-6 text-lg bg-blue-500 hover:bg-blue-600 text-white font-mono"
