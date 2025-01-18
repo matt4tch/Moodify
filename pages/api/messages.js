@@ -1,7 +1,7 @@
 import prisma from '../../lib/prisma';
 
 
-export default async function handler(req, res) { 
+export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
             const body = await request.json();
@@ -39,29 +39,25 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'GET') {
         try {
-            const today = new Date();
-            const currentDay = today.getDate();
-            const currentMonth = today.getMonth() + 1;
-            const currentYear = today.getFullYear();
-    
-            const messages = await prisma.message.findMany({
+            const url = 'localhost:3000/' + req.url;
+            const { searchParams } = new URL(url);
+            const currentUserId = searchParams.get('user_id');
+            const currentDay = searchParams.get('date').split('-')[1];
+            const currentMonth = searchParams.get('date').split('-')[0];
+            const currentYear = searchParams.get('year');
+
+            console.log(currentDay, currentMonth, currentYear);
+            const message = await prisma.message.findFirst({
                 where: {
                     day: currentDay,
                     month: currentMonth,
                     year: currentYear,
-                },
-                include: {
-                    user: true,
-                },
-                orderBy: {
-                    id: 'desc', // Using id for ordering since we don't have a timestamp
-                },
+                    userId: currentUserId,
+                }
             });
-            console.log("Success getting messages.");
-    
-            return res.status(200).json(messages);
+            console.log('message', message);
+            return res.status(200).json(message);
         } catch (error) {
-            console.error('Database Error:', error);
             return res.status(500).json({ message: 'An unexpected error occurred' });
         }
 
