@@ -35,34 +35,28 @@ export default function AIPromptChat() {
   return (
     <div className="font-mono h-screen flex flex-col">
       {/* Title Section */}
-      <header className=" text-blue-500 text-center py-4">
+      <header className="text-blue-500 text-center py-4">
         <h1 className="text-3xl font-bold">Title</h1>
       </header>
-
+  
       {/* Main Layout */}
       <div className="flex flex-grow">
-        {/* Left Section: Only Render if Not "Default" */}
-        {selectedCharacter !== 'Default' && (
-          <div className="w-1/6 bg-white flex flex-col items-center justify-center">
-            {currentCharacter?.imageUrl && (
-              <>
-                <img
-                  src={currentCharacter.imageUrl}
-                  alt={currentCharacter.name}
-                  className="w-24 h-auto object-contain rounded-md"
-                />
-                <p className="mt-2 text-sm font-bold text-center">{currentCharacter.name}</p>
-              </>
-            )}
-          </div>
-        )}
-
+        {/* Left Section: Always Render */}
+        <div className="w-1/6 bg-white flex flex-col items-center justify-center">
+          {selectedCharacter !== 'Default' && currentCharacter?.imageUrl && (
+            <>
+              <img
+                src={currentCharacter.imageUrl}
+                alt={currentCharacter.name}
+                className="w-24 h-auto object-contain rounded-md"
+              />
+              <p className="mt-2 text-sm font-bold text-center">{currentCharacter.name}</p>
+            </>
+          )}
+        </div>
+  
         {/* Center Chat Form */}
-        <main
-          className={`flex-grow flex items-center justify-center p-4 ${
-            selectedCharacter !== 'Default' ? '-ml-10' : ''
-          }`}
-        >
+        <main className="flex-grow flex items-center justify-center p-4 -ml-10">
           <form
             onSubmit={onSubmit}
             className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
@@ -83,7 +77,7 @@ export default function AIPromptChat() {
             </Button>
           </form>
         </main>
-
+  
         {/* Right Sidebar */}
         <CharacterSidebar
           onSelectCharacter={setSelectedCharacter}
@@ -92,4 +86,4 @@ export default function AIPromptChat() {
       </div>
     </div>
   );
-}
+  
