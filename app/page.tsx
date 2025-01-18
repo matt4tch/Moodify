@@ -23,6 +23,27 @@ export default function AIPromptChat() {
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
 
+  const testApiService = async () => {
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log("Success. Here's the message data", data);
+
+    } catch (error) {
+      console.error('Error in API test:', error);
+
+    }
+  }
+
+  useEffect(() => {
+    testApiService();
+  } ,[]);
+
 
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
