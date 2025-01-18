@@ -1,17 +1,19 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import { useChat } from 'ai/react';
+import {useEffect, useState, useMemo} from 'react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
 import aiService from '../lib/aiService';
 import { DayPicker } from 'react-day-picker';
+import { debounce } from 'lodash';
 import "react-day-picker/style.css";
+import { setDefaultAutoSelectFamily } from 'net';
+
 
 const characters = [
   { id: 0, name: 'Default', 
         imageUrl: '/images/default.png', 
-        context: "You are a neutral assistant designed to summarize the user's daily journal entry. Provide a clear, concise summary without personal opinions, stylistic embellishments, or creative flair. Stick to the facts and ensure the summary is straightforward and accurate.", 
+        context: "You are putting yourself in the user's shoes and talking as if you are the user. Rephrase and summarize the user's input text to help them reflect more positively on their day and see things from an alternate perspective. Use encouraging and uplifting language to guide them towards a brighter perspective. Draw from your own experiences and insights to provide a supportive response that fosters hope and motivation. Keep the tone empathetic and understanding, focusing on turning challenges into opportunities for growth and resilience. Don't be corny or overly sentimental, but aim to inspire and uplift. Keep the length of the response shorter than length of the input text from the user. Don't forget to talk from the users perspective. Also, try to talk similar to how the user spoke in their input text.", 
         description: "" },
   { id: 1, name: 'Gordon Ramsay', 
         imageUrl: '/Gordan.png', 
@@ -59,26 +61,44 @@ Now, complete the following sentence in a positive and supportive way:
 `;
 
 export default function AIPromptChat() {
-  const { input, handleInputChange } = useChat();
+  const [input, setInput] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
   const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [aiSuggestion, setAiSuggestion] = useState('');
 
-const testApiService = async () => {
-    try {
-        const response = await fetch('/api/messages', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data = await response.json();
-        console.log("Success. Here's the message data", data);
-
-    } catch (error) {
-        console.error('Error in API test:', error);
+  const getSuggestion = async (text : string) => {
+    const response = await aiService(prompt, text, "gpt-4o-mini");
+    console.log("AI Autocomplete Response:", response);
+    if (response) {
+      setAiSuggestion(response);
     }
-}
+
+  } 
+
+  const debounceGetSuggestion = debounce(getSuggestion, 5000, { leading: false, trailing: true });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInput(e.target.value);
+      debounceGetSuggestion(e.target.value); 
+    }
+
+
+  const testApiService = async () => {
+      try {
+          const response = await fetch('/api/messages', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+          const data = await response.json();
+          console.log("Success. Here's the message data", data);
+
+      } catch (error) {
+          console.error('Error in API test:', error);
+      }
+  }
 
   useEffect(() => {
     testApiService();
@@ -94,11 +114,11 @@ const testApiService = async () => {
     console.log('input_context', input_context);
     e.preventDefault();
     if (selectedCharacter) {
-       const response = aiService(prompt, input);
-       console.log("AI Response:", response)
+       const response = aiService( input_context, input, "gpt-4");
+       console.log("AI Response ?????:", response)
     } else {
       let input_context = ""
-      aiService(input_context, input);
+      aiService(input_context, input, "gpt-4");
     }
   };
 
@@ -114,25 +134,25 @@ const testApiService = async () => {
         {/* Center Chat Form */}
         <main className="flex-grow flex items-center justify-center p-4">
         <div className="fixed top-6 left-6 w-auto ">
-  <DayPicker
-    mode="single"
-    selected={selected}
-    onSelect={setSelected}
-    className="border rounded-lg bg-white shadow-sm p-3"
-    disabled={{ after: new Date() }}
-    footer={
-      selected ? (
-        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
-          {selected.toLocaleDateString()}
-        </p>
-      ) : (
-        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
-          Pick a day
-        </p>
-      )
-    }
-  />
-</div>
+      <DayPicker
+        mode="single"
+        selected={selected}
+        onSelect={setSelected}
+        className="border rounded-lg bg-white shadow-sm p-3"
+        disabled={{ after: new Date() }}
+        footer={
+          selected ? (
+            <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+              {selected.toLocaleDateString()}
+            </p>
+          ) : (
+            <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+              Pick a day
+            </p>
+          )
+        }
+        />
+      </div>
           <form
               onSubmit={onSubmit}
               className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
