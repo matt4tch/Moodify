@@ -64,5 +64,47 @@ export async function POST(request : Request) {
         console.error('Database Error:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-    
+}
+
+
+export async function DELETE(request : Request) {
+    try {
+        const body = await request.json();
+        const { messageId } = body;
+
+        const deletedMessage = await prisma.message.delete({
+            where: {
+                id: messageId,
+            },
+        });
+
+        return NextResponse.json({ message: deletedMessage }, { status: 200 });
+
+    } catch (error) {
+        console.error('Database Error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
+
+export async function PUT(request : Request) {
+    try {
+        const body = await request.json();
+        const { messageId, new_user_prompt, new_ai_response } = body;
+
+        const updatedMessage = await prisma.message.update({
+            where: {
+                id: messageId,
+            },
+            data: {
+                user_prompt: new_user_prompt,
+                ai_response: new_ai_response,
+            },
+        });
+        return NextResponse.json({ message: updatedMessage }, { status: 204 });
+
+    } catch (error) {
+        console.error('Database Error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
 }
