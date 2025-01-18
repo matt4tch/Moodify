@@ -111,7 +111,7 @@ const testApiService = async () => {
       <div className="flex flex-grow relative">
         {/* Center Chat Form */}
         <main className="flex-grow flex items-center justify-center p-4">
-        <div className="fixed top-6 left-6 w-auto sm:w-64 md:w-80 lg:w-96">
+        <div className="fixed top-6 left-6 w-auto ">
   <DayPicker
     mode="single"
     selected={selected}
