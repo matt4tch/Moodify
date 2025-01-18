@@ -232,7 +232,6 @@ export default function AIPromptChat() {
               onChange={handleInputChange}
               placeholder="What would you like to reflect on today?"
               className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
-              style={{ position: 'relative', zIndex: 2 }} // Keep the user's text above the suggestion
             />
 
             {aiSuggestion && input && (
