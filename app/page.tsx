@@ -63,26 +63,55 @@ export default function AIPromptChat() {
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
 
-const testApiService = async () => {
-    try {
-        const response = await fetch('/api/messages', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data = await response.json();
-        console.log("Success. Here's the message data", data);
+    const testApiService = async () => {
+        try {
+            const response = await fetch('/api/messages', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            console.log("Success. Here's the message data", data);
 
-    } catch (error) {
-        console.error('Error in API test:', error);
+        } catch (error) {
+            console.error('Error in API test:', error);
+        }
     }
-}
+
+    const getMessages = async (date: Date, userId: number) => {
+        try {
+            const params = new URLSearchParams({
+                date: `${date.getMonth() + 1}-${date.getDate()}`,
+                year: date.getFullYear().toString(),
+                userId: userId.toString()
+            });
+
+            const response = await fetch(`/api/messages?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            console.log("Success. Here's the message data", data);
+            return data;
+        } catch (error) {
+            console.error('Error in getMessages:', error);
+            return null;
+        }
+    }
+
 
   useEffect(() => {
     testApiService();
   } ,[]);
 
+    useEffect(() => {
+        if(selected){
+            getMessages(selected, 1).then(() => console.log('OK'), () => console.log('FAIL'));
+        }
+    }, [selected]);
 
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
