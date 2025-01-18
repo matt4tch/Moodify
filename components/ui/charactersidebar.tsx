@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const characters = [
-  { id: 0, name: 'No Characters' },
+  { id: 0, name: 'Default' },
   { id: 1, name: 'Gordon Ramsay' },
   { id: 2, name: 'Eminem' },
   { id: 3, name: 'Costco Guys' },

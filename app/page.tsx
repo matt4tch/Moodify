@@ -29,7 +29,7 @@ export default function AIPromptChat() {
             className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
           />
           <Button type="submit" className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono">
-            {selectedCharacter ? `Submit to ${selectedCharacter}` : 'Submit'}
+            {selectedCharacter ? `Summarize by ${selectedCharacter}` : 'Summary'}
           </Button>
         </form>
       </main>
