@@ -1,12 +1,14 @@
 'use client';
 
-import {useEffect, useState} from 'react';
-import { useChat } from 'ai/react';
+import { useEffect, useState, useRef , useMemo} from 'react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
-import aiService from '../lib/aiService';
 import { DayPicker } from 'react-day-picker';
+import { debounce } from 'lodash';
 import "react-day-picker/style.css";
+import { setDefaultAutoSelectFamily } from 'net';
+import aiService from "@/lib/aiService";
+
 
 const characters = [
   { id: 0, name: 'Default', 
@@ -59,25 +61,45 @@ Now, complete the following sentence in a positive and supportive way:
 `;
 
 export default function AIPromptChat() {
-  const { input, handleInputChange } = useChat();
+  const [input, setInput] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
+  const [summaryCharacter, setSummaryCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
+  const [showResponse, setShowResponse] = useState(false);
+  const responseRef = useRef<HTMLDivElement>(null);
+  const [aiSuggestion, setAiSuggestion] = useState('');
 
-    const testApiService = async () => {
-        try {
-            const response = await fetch('/api/messages', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const data = await response.json();
-            console.log("Success. Here's the message data", data);
-
-        } catch (error) {
-            console.error('Error in API test:', error);
-        }
+  const getSuggestion = async (text : string) => {
+    const response = await aiService(prompt, text, "gpt-4o-mini");
+    console.log("AI Autocomplete Response:", response);
+    if (response) {
+      setAiSuggestion(response);
     }
+
+  } 
+
+  const debounceGetSuggestion = debounce(getSuggestion, 5000, { leading: false, trailing: true });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInput(e.target.value);
+      debounceGetSuggestion(e.target.value); 
+    }
+
+
+  const testApiService = async () => {
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      console.log("Success. Here's the message data", data);
+    } catch (error) {
+      console.error('Error in API test:', error);
+    }
+  };
 
     const getMessages = async (date: Date, userId: number) => {
         try {
@@ -105,106 +127,147 @@ export default function AIPromptChat() {
 
   useEffect(() => {
     testApiService();
-  } ,[]);
+  }, []);
 
-    useEffect(() => {
-        if(selected){
-            getMessages(selected, 1).then(() => console.log('OK'), () => console.log('FAIL'));
-        }
-    }, [selected]);
+  useEffect(() => {
+    if (showResponse && responseRef.current) {
+      // Add a small delay to ensure the response box is rendered
+      setTimeout(() => {
+        responseRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 100);
+    }
+  }, [showResponse]);
 
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
   );
+
+  const summaryCharacterData = characters.find(
+    (character) => character.name === summaryCharacter
+  );
+
   const input_context = currentCharacter?.context || "";
-  
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log('input_context', input_context);
     e.preventDefault();
     if (selectedCharacter) {
-       const response = aiService(prompt, input);
-       console.log("AI Response:", response)
+       const response = aiService( input_context, input, "gpt-4");
+       console.log("AI Response ?????:", response)
     } else {
-      aiService(prompt, input);
+      let input_context = ""
+      aiService(input_context, input, "gpt-4");
     }
   };
 
   return (
-    <div className="font-mono h-screen flex flex-col">
+    <div className="font-mono min-h-screen flex flex-col">
       {/* Title Section */}
       <header className="text-blue-500 text-center py-4">
         <h1 className="text-3xl font-bold">PosiLog</h1>
       </header>
 
-      {/* Main Layout */}
-      <div className="flex flex-grow relative">
-        {/* Center Chat Form */}
-        <main className="flex-grow flex items-center justify-center p-4">
-        <div className="fixed top-6 left-6 w-auto sm:w-64 md:w-80 lg:w-96">
-  <DayPicker
-    mode="single"
-    selected={selected}
-    onSelect={setSelected}
-    className="border rounded-lg bg-white shadow-sm p-3"
-    disabled={{ after: new Date() }}
-    footer={
-      selected ? (
-        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
-          {selected.toLocaleDateString()}
-        </p>
-      ) : (
-        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
-          Pick a day
-        </p>
-      )
-    }
-  />
-</div>
-          <form
-              onSubmit={onSubmit}
-              className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
-          >
+      {/* Main Layout - Split into three sections */}
+      <div className="flex flex-grow space-x-6 p-4">
+        {/* Left Section: Calendar and Character Description */}
+        <div className="flex flex-col w-full sm:w-1/4 space-y-6">
+          <div className="w-full">
+            <DayPicker
+              mode="single"
+              selected={selected}
+              onSelect={setSelected}
+              className="border rounded-lg bg-white shadow-sm p-3"
+              disabled={{ after: new Date() }}
+              footer={
+                selected ? (
+                  <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+                    {selected.toLocaleDateString()}
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+                    Pick a day
+                  </p>
+                )
+              }
+            />
+          </div>
+
+          {selectedCharacter !== "Default" && currentCharacter && (
+            <div className="bg-gray-200 rounded-lg p-4 shadow-md w-full">
+              <div className="flex items-center space-x-4">
+                <img
+                  src={currentCharacter.imageUrl}
+                  alt={currentCharacter.name}
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+                <div className="flex flex-col text-left">
+                  <p className="text-lg font-bold text-gray-700 sm:text-xl md:text-2xl lg:text-3xl">
+                    {currentCharacter.name}
+                  </p>
+                  <p className="text-sm text-gray-600 italic sm:text-base md:text-lg lg:text-xl">
+                    {currentCharacter.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Middle Section: Text Box, Submit Button, and Response Box */}
+        <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
+          <form onSubmit={onSubmit} className="flex flex-col w-full">
             <textarea
-                value={input}
-                onChange={handleInputChange}
-                placeholder="What would you like to reflect on today?"
-                className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
+              value={input}
+              onChange={handleInputChange}
+              placeholder="What would you like to reflect on today?"
+              className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
             />
             <Button
-                type="submit"
-                className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono"
+              type="submit"
+              className="w-full py-6 text-lg bg-blue-500 hover:bg-blue-600 text-white font-mono"
             >
               {selectedCharacter && selectedCharacter !== 'Default'
-                ? `Summary by ${selectedCharacter}`
-                : 'Summary'}
+                ? `Summarize with ${selectedCharacter}`
+                : 'Summarize'}
             </Button>
           </form>
-        </main>
 
-        {/* Character Details Section */}
-{selectedCharacter !== "Default" && currentCharacter && (
-  <div className="fixed bottom-6 left-6 flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm w-auto">
-    <img
-      src={currentCharacter.imageUrl}
-      alt={currentCharacter.name}
-      className="w-16 h-16 rounded-full object-cover sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
-    />
-    <div className="flex flex-col text-left">
-      <p className="text-lg font-bold text-gray-700 sm:text-xl md:text-2xl lg:text-3xl">
-        {currentCharacter.name}
-      </p>
-      <p className="text-sm text-gray-600 italic sm:text-base md:text-lg lg:text-xl">
-        {currentCharacter.description}
-      </p>
-    </div>
-  </div>
-)}
+          {/* Response Box */}
+          {showResponse && (
+            <div
+              ref={responseRef}
+              className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
+            >
+              <div className="flex items-center mb-4">
+                {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
+                  <img
+                    src={summaryCharacterData.imageUrl}
+                    alt={summaryCharacterData.name}
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                )}
+                <h3 className="text-xl font-bold">
+                  {summaryCharacterData
+                    ? `${summaryCharacterData.name}'s Summary`
+                    : 'Summary'}
+                </h3>
+              </div>
+              <p className="text-lg whitespace-pre-wrap">
+                {input}
+              </p>
+            </div>
+          )}
+        </div>
 
-        {/* Right Sidebar */}
-        <CharacterSidebar
-          onSelectCharacter={setSelectedCharacter}
-          selectedCharacter={selectedCharacter}
-        />
+        {/* Right Section: Character Menu Sidebar */}
+        <div className="flex flex-col w-full sm:w-1/4">
+          <CharacterSidebar
+            onSelectCharacter={setSelectedCharacter}
+            selectedCharacter={selectedCharacter}
+          />
+        </div>
       </div>
     </div>
   );
