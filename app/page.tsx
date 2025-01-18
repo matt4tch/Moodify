@@ -154,10 +154,14 @@ export default function AIPromptChat() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedCharacter) {
+        setShowResponse(true);
+        setSummaryCharacter(selectedCharacter);
        const response = aiService( input_context, input, "gpt-4");
        console.log("AI Response ?????:", response)
     } else {
       let input_context = ""
+      setShowResponse(true);
+      setSummaryCharacter(selectedCharacter);
       aiService(input_context, input, "gpt-4");
     }
   };
