@@ -63,7 +63,7 @@ export default function AIPromptChat() {
           <textarea
             value={input}
             onChange={handleInputChange}
-            placeholder="Enter your prompt here..."
+            placeholder="What would you like to reflect on today?"
             className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
           />
           <Button
