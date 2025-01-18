@@ -4,12 +4,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const characters = [
   { id: 0, name: 'Default', imageUrl: '/images/default.png' },
-  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordon Ramsay.webp' },
+  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordan.png' },
   { id: 2, name: 'Eminem', imageUrl: '/Eminem.png' },
   { id: 3, name: 'Costco Guys', imageUrl: '/Costco Guys.png' },
   { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
-  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.png' },
-  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.png' },
+  { id: 5, name: 'Morgan Freeman', imageUrl: '/morganfreeman.png' },
+  { id: 6, name: 'Mike Tyson', imageUrl: '/miketyson.png' },
 ];
 
 export function CharacterSidebar({
