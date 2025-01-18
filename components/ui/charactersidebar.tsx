@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -21,6 +21,12 @@ export function CharacterSidebar({
 }) {
   const [isOpen, setIsOpen] = useState(true)
 
+  useEffect(() => {
+    if (!selectedCharacter) {
+      onSelectCharacter('Default')
+    }
+  }, [selectedCharacter, onSelectCharacter])
+    
   return (
     <div 
       className={`fixed right-0 top-0 h-full bg-gray-800 text-white transition-all duration-300 ease-in-out ${isOpen ? 'w-48' : 'w-10'}`}
