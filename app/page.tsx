@@ -36,7 +36,7 @@ export default function AIPromptChat() {
     <div className="flex h-screen font-mono">
       {/* Left Section: Only Render if Not "Default" */}
       {selectedCharacter !== 'Default' && (
-        <div className="w-1/6 bg-gray-100 flex flex-col items-center justify-center">
+        <div className="w-1/6 bg-white-100 flex flex-col items-center justify-center">
           {currentCharacter?.imageUrl && (
             <>
               <img
