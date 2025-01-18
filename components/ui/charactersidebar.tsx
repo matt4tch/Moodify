@@ -1,35 +1,37 @@
-import { useEffect, useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const characters = [
-  { id: 0, name: 'Default' },
-  { id: 1, name: 'Gordon Ramsay' },
-  { id: 2, name: 'Eminem' },
-  { id: 3, name: 'Costco Guys' },
-  { id: 4, name: 'Bowser' },
-  { id: 5, name: 'Morgan Freeman' },
-  { id: 6, name: 'Mike Tyson' },
-]
+  { id: 0, name: 'Default', imageUrl: '/images/default.png' },
+  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordon Ramsay.webp' },
+  { id: 2, name: 'Eminem', imageUrl: '/Eminem.jpg' },
+  { id: 3, name: 'Costco Guys', imageUrl: '/images/costco-guys.png' },
+  { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
+  { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.webp' },
+  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.jpg' },
+];
 
-export function CharacterSidebar({ 
-  onSelectCharacter, 
-  selectedCharacter 
-}: { 
-  onSelectCharacter: (character: string) => void,
-  selectedCharacter: string | null
+export function CharacterSidebar({
+  onSelectCharacter,
+  selectedCharacter,
+}: {
+  onSelectCharacter: (character: string) => void;
+  selectedCharacter: string | null;
 }) {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     if (!selectedCharacter) {
-      onSelectCharacter('Default')
+      onSelectCharacter('Default');
     }
-  }, [selectedCharacter, onSelectCharacter])
-    
+  }, [selectedCharacter, onSelectCharacter]);
+
   return (
-    <div 
-      className={`fixed right-0 top-0 h-full bg-gray-800 text-white transition-all duration-300 ease-in-out ${isOpen ? 'w-48' : 'w-10'}`}
+    <div
+      className={`fixed right-0 top-0 h-full bg-gray-800 text-white transition-all duration-300 ease-in-out ${
+        isOpen ? 'w-48' : 'w-10'
+      }`}
     >
       <Button
         onClick={() => setIsOpen(!isOpen)}
@@ -45,8 +47,8 @@ export function CharacterSidebar({
             key={character.id}
             onClick={() => onSelectCharacter(character.name)}
             className={`w-full mb-2 justify-start font-mono text-sm ${
-              selectedCharacter === character.name 
-                ? 'bg-white text-black hover:bg-gray-200' 
+              selectedCharacter === character.name
+                ? 'bg-white text-black hover:bg-gray-200'
                 : 'bg-transparent hover:bg-gray-700'
             }`}
             variant="ghost"
@@ -56,6 +58,5 @@ export function CharacterSidebar({
         ))}
       </div>
     </div>
-  )
+  );
 }
-
