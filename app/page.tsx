@@ -8,11 +8,11 @@ import { CharacterSidebar } from '../components/ui/charactersidebar';
 const characters = [
   { id: 0, name: 'Default', imageUrl: '/images/default.png' },
   { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordon Ramsay.webp' },
-  { id: 2, name: 'Eminem', imageUrl: '/Eminem.jpg' },
-  { id: 3, name: 'Costco Guys', imageUrl: '/Costco Guys.jpg' },
+  { id: 2, name: 'Eminem', imageUrl: '/Eminem.png' },
+  { id: 3, name: 'Costco Guys', imageUrl: '/Costco Guys.png' },
   { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
   { id: 5, name: 'Morgan Freeman', imageUrl: '/morgan-freeman.webp' },
-  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.jpg' },
+  { id: 6, name: 'Mike Tyson', imageUrl: '/mike.png' },
 ];
 
 export default function AIPromptChat() {
