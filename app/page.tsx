@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useChat } from 'ai/react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
 import aiService from '../lib/aiService';
+import { DayPicker } from 'react-day-picker';
+import "react-day-picker/style.css";
 
 const characters = [
   { id: 0, name: 'Default', imageUrl: '/images/default.png', description: "" },
@@ -19,6 +21,8 @@ const characters = [
 export default function AIPromptChat() {
   const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
+  const [selected, setSelected] = useState<Date>(new Date());
+
 
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
@@ -46,19 +50,37 @@ export default function AIPromptChat() {
       <div className="flex flex-grow relative">
         {/* Center Chat Form */}
         <main className="flex-grow flex items-center justify-center p-4">
+          <div className="flex flex-col items-center">
+            <DayPicker
+                mode="single"
+                selected={selected}
+                onSelect={setSelected}
+                className="border rounded-lg bg-white shadow-sm p-3 scale-90 transform -translate-x-10"
+                disabled={ { after: new Date() } }
+                footer={
+                  selected ? (
+                      <p className="text-sm text-gray-600 mt-2">
+                        {selected.toLocaleDateString()}
+                      </p>
+                  ) : (
+                      <p className="text-sm text-gray-600 mt-2">Pick a day</p>
+                  )
+                }
+            />
+          </div>
           <form
-            onSubmit={onSubmit}
-            className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col" 
+              onSubmit={onSubmit}
+              className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
           >
             <textarea
-              value={input}
-              onChange={handleInputChange}
-              placeholder="What would you like to reflect on today?"
-              className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
+                value={input}
+                onChange={handleInputChange}
+                placeholder="What would you like to reflect on today?"
+                className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
             />
             <Button
-              type="submit"
-              className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono"
+                type="submit"
+                className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono"
             >
               {selectedCharacter && selectedCharacter !== 'Default'
                 ? `Summary by ${selectedCharacter}`
