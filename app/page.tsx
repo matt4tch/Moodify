@@ -111,24 +111,26 @@ const testApiService = async () => {
       <div className="flex flex-grow relative">
         {/* Center Chat Form */}
         <main className="flex-grow flex items-center justify-center p-4">
-        <div className="fixed top-6 left-6">
-          <DayPicker
-            mode="single"
-            selected={selected}
-            onSelect={setSelected}
-            className="border rounded-lg bg-white shadow-sm p-3"
-            disabled={{ after: new Date() }}
-            footer={
-              selected ? (
-              <p className="text-sm text-gray-600 mt-2">
-              {selected.toLocaleDateString()}
-              </p>
-              ) : (
-              <p className="text-sm text-gray-600 mt-2">Pick a day</p>
-              )
-            }
-          />
-        </div>
+        <div className="fixed top-6 left-6 w-auto sm:w-64 md:w-80 lg:w-96">
+  <DayPicker
+    mode="single"
+    selected={selected}
+    onSelect={setSelected}
+    className="border rounded-lg bg-white shadow-sm p-3"
+    disabled={{ after: new Date() }}
+    footer={
+      selected ? (
+        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+          {selected.toLocaleDateString()}
+        </p>
+      ) : (
+        <p className="text-sm text-gray-600 mt-2 sm:text-base md:text-lg lg:text-xl">
+          Pick a day
+        </p>
+      )
+    }
+  />
+</div>
           <form
               onSubmit={onSubmit}
               className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
@@ -151,23 +153,23 @@ const testApiService = async () => {
         </main>
 
         {/* Character Details Section */}
-        {selectedCharacter !== "Default" && currentCharacter && (
-          <div className="fixed bottom-6 left-6 flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm">
-            <img
-              src={currentCharacter.imageUrl}
-              alt={currentCharacter.name}
-             className="w-16 h-16 rounded-full object-cover"
-            />
-          <div className="flex flex-col text-left">
-            <p className="text-lg font-bold text-gray-700">
-            {currentCharacter.name}
-              </p>
-            <p className="text-sm text-gray-600 italic">
-              {currentCharacter.description}
-            </p>
-          </div>
-         </div>
-        )}
+{selectedCharacter !== "Default" && currentCharacter && (
+  <div className="fixed bottom-6 left-6 flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm w-auto">
+    <img
+      src={currentCharacter.imageUrl}
+      alt={currentCharacter.name}
+      className="w-16 h-16 rounded-full object-cover sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28"
+    />
+    <div className="flex flex-col text-left">
+      <p className="text-lg font-bold text-gray-700 sm:text-xl md:text-2xl lg:text-3xl">
+        {currentCharacter.name}
+      </p>
+      <p className="text-sm text-gray-600 italic sm:text-base md:text-lg lg:text-xl">
+        {currentCharacter.description}
+      </p>
+    </div>
+  </div>
+)}
 
         {/* Right Sidebar */}
         <CharacterSidebar
