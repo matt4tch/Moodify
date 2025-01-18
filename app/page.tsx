@@ -33,55 +33,63 @@ export default function AIPromptChat() {
   };
 
   return (
-    <div className="flex h-screen font-mono">
-      {/* Left Section: Only Render if Not "Default" */}
-      {selectedCharacter !== 'Default' && (
-        <div className="w-1/6 bg-white-100 flex flex-col items-center justify-center">
-          {currentCharacter?.imageUrl && (
-            <>
-              <img
-                src={currentCharacter.imageUrl}
-                alt={currentCharacter.name}
-                className="w-24 h-auto object-contain rounded-md"
-              />
-              <p className="mt-2 text-sm font-bold text-center">{currentCharacter.name}</p>
-            </>
-          )}
-        </div>
-      )}
+    <div className="font-mono h-screen flex flex-col">
+      {/* Title Section */}
+      <header className=" text-blue-500 text-center py-4">
+        <h1 className="text-3xl font-bold">Title</h1>
+      </header>
 
-      {/* Center Chat Form */}
-      <main
-        className={`flex-grow flex items-center justify-center p-4 ${
-          selectedCharacter !== 'Default' ? '-ml-10' : ''
-        }`}
-      >
-        <form
-          onSubmit={onSubmit}
-          className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
+      {/* Main Layout */}
+      <div className="flex flex-grow">
+        {/* Left Section: Only Render if Not "Default" */}
+        {selectedCharacter !== 'Default' && (
+          <div className="w-1/6 bg-gray-100 flex flex-col items-center justify-center">
+            {currentCharacter?.imageUrl && (
+              <>
+                <img
+                  src={currentCharacter.imageUrl}
+                  alt={currentCharacter.name}
+                  className="w-24 h-auto object-contain rounded-md"
+                />
+                <p className="mt-2 text-sm font-bold text-center">{currentCharacter.name}</p>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Center Chat Form */}
+        <main
+          className={`flex-grow flex items-center justify-center p-4 ${
+            selectedCharacter !== 'Default' ? '-ml-10' : ''
+          }`}
         >
-          <textarea
-            value={input}
-            onChange={handleInputChange}
-            placeholder="What would you like to reflect on today?"
-            className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
-          />
-          <Button
-            type="submit"
-            className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono"
+          <form
+            onSubmit={onSubmit}
+            className="w-[calc(100vh-32px)] max-w-[800px] aspect-square flex flex-col"
           >
-            {selectedCharacter && selectedCharacter !== 'Default'
-              ? `Summary by ${selectedCharacter}`
-              : 'Summary'}
-          </Button>
-        </form>
-      </main>
+            <textarea
+              value={input}
+              onChange={handleInputChange}
+              placeholder="What would you like to reflect on today?"
+              className="w-full flex-grow p-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
+            />
+            <Button
+              type="submit"
+              className="w-full py-6 text-lg mt-4 bg-blue-500 hover:bg-blue-600 text-white font-mono"
+            >
+              {selectedCharacter && selectedCharacter !== 'Default'
+                ? `Summary by ${selectedCharacter}`
+                : 'Summary'}
+            </Button>
+          </form>
+        </main>
 
-      {/* Right Sidebar */}
-      <CharacterSidebar
-        onSelectCharacter={setSelectedCharacter}
-        selectedCharacter={selectedCharacter}
-      />
+        {/* Right Sidebar */}
+        <CharacterSidebar
+          onSelectCharacter={setSelectedCharacter}
+          selectedCharacter={selectedCharacter}
+        />
+      </div>
     </div>
   );
 }
