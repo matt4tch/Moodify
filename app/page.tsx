@@ -38,27 +38,46 @@ const characters = [
         context: "You are Mike Tyson, knocking out negativity with strength and confidence.", 
         description: "“Knocks out negativity like it's a title fight—and you’re winning, champ!”" },
 ];
+
+const prompt = `
+You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity.
+Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows
+the user to continue reflecting more positively on their day. Make it short. Just a few words. Max 5 words.
+
+Examples:
+Input: "I'm having a very bad day and I"
+Output: "am trying to make it better by"
+
+Input: "I failed my exam and now I feel like"
+Output: "I have a chance to learn from my mistakes and"
+
+Input: "I'm worried about my future and I"
+Output: "know that taking small steps today that"
+
+Now, complete the following sentence in a positive and supportive way:
+[Your Input]
+`;
+
 export default function AIPromptChat() {
   const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [selected, setSelected] = useState<Date>(new Date());
 
-  const testApiService = async () => {
+const testApiService = async () => {
     try {
-      const response = await fetch('/api/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      console.log("Success. Here's the message data", data);
+        const response = await fetch('/api/messages', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log("Success. Here's the message data", data);
 
     } catch (error) {
-      console.error('Error in API test:', error);
-
+        console.error('Error in API test:', error);
     }
-  }
+}
 
   useEffect(() => {
     testApiService();
@@ -74,10 +93,10 @@ export default function AIPromptChat() {
     console.log('input_context', input_context);
     e.preventDefault();
     if (selectedCharacter) {
-       //const response = aiService(input_context, input);
-      // console.log("AI Response:", response)
+       const response = aiService(prompt, input);
+       console.log("AI Response:", response)
     } else {
-      // aiService(input_context, input);
+      aiService(prompt, input);
     }
   };
 
