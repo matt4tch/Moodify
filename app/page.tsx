@@ -9,15 +9,35 @@ import { DayPicker } from 'react-day-picker';
 import "react-day-picker/style.css";
 
 const characters = [
-  { id: 0, name: 'Default', imageUrl: '/images/default.png', description: "" },
-  { id: 1, name: 'Gordon Ramsay', imageUrl: '/Gordan.png', description: "“The most famous chef in the world has descended from his culinary haven to help make your day just that much better. All while not calling you an idiot sandwich.”" },
-  { id: 2, name: 'Eminem', imageUrl: '/Eminem.png', description: "“Making your day, stay out of the gray, for zero pay. Once you talk to me, I’ll make you feel like a G, and again, it's for free.”" },
-  { id: 3, name: 'Costco Guys', imageUrl: '/Costco%20Guys.png', description: "“We bring the BOOM to your life, which will make you smile as much as we smile when we see the DOUBLE CHUNK CHOCOLATE COOKIE!”" },
-  { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp', description: "“RAWRRR! Your bad vibes just got stomped.”" },
-  { id: 5, name: 'Morgan Freeman', imageUrl: '/morganfreeman.png', description: "“He narrates your life so smoothly, even your problems sound inspiring.”" },
-  { id: 6, name: 'Mike Tyson', imageUrl: '/miketyson.png', description: "“Knocks out negativity like it's a title fight—and you’re winning, champ!”" },
+  { id: 0, name: 'Default', 
+        imageUrl: '/images/default.png', 
+        context: "You are a helpful and friendly assistant.", 
+        description: "" },
+  { id: 1, name: 'Gordon Ramsay', 
+        imageUrl: '/Gordan.png', 
+        context: "You are Gordon Ramsay, a world-renowned chef. Provide constructive advice with a sprinkle of humor.", 
+        description: "“The most famous chef in the world has descended from his culinary haven to help make your day just that much better. All while not calling you an idiot sandwich.”" },
+  { id: 2, name: 'Eminem', 
+        imageUrl: '/Eminem.png', 
+        context: "You are Eminem, the legendary rapper. Speak in rhymes and add motivation.", 
+        description: "“Making your day, stay out of the gray, for zero pay. Once you talk to me, I’ll make you feel like a G, and again, it's for free.”" },
+  { id: 3, name: 'Costco Guys', 
+        imageUrl: '/Costco%20Guys.png', 
+        context: "You are the Costco Guys, full of energy, making everything sound like a great deal!", 
+        description: "“We bring the BOOM to your life, which will make you smile as much as we smile when we see the DOUBLE CHUNK CHOCOLATE COOKIE!”" },
+  { id: 4, name: 'Bowser', 
+        imageUrl: '/Bowser.webp', 
+        context: "You are Bowser, bold and humorous, stomping negativity like a Mario block.", 
+        description: "“RAWRRR! Your bad vibes just got stomped.”" },
+  { id: 5, name: 'Morgan Freeman', 
+        imageUrl: '/morganfreeman.png', 
+        context: "You are Morgan Freeman, narrating responses elegantly and inspiringly.", 
+        description: "“He narrates your life so smoothly, even your problems sound inspiring.”" },
+  { id: 6, name: 'Mike Tyson', 
+        imageUrl: '/miketyson.png', 
+        context: "You are Mike Tyson, knocking out negativity with strength and confidence.", 
+        description: "“Knocks out negativity like it's a title fight—and you’re winning, champ!”" },
 ];
-
 export default function AIPromptChat() {
   const { input, handleInputChange } = useChat();
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
@@ -27,15 +47,16 @@ export default function AIPromptChat() {
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
   );
-
+  const input_context = currentCharacter?.context || "";
+  
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('input_context', input_context);
     e.preventDefault();
     if (selectedCharacter) {
-      let input_context = ""
-      aiService(input_context, input)
+       //const response = aiService(input_context, input);
+      // console.log("AI Response:", response)
     } else {
-      let input_context = ""
-      aiService(input_context, input);
+      // aiService(input_context, input);
     }
   };
 
