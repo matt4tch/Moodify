@@ -66,7 +66,7 @@ export default function AIPromptChat() {
                       <p className="text-sm text-gray-600 mt-2">Pick a day</p>
                   )
                 }
-            />
+                />
           </div>
           <form
               onSubmit={onSubmit}
@@ -90,18 +90,21 @@ export default function AIPromptChat() {
         </main>
 
         {/* Character Details Section */}
-        {selectedCharacter !== 'Default' && currentCharacter && (
-          <div className="flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm 
-                  sm:absolute sm:bottom-20 sm:left-6 sm:flex-row flex flex-col sm:max-w-sm max-w-full">
+        {selectedCharacter !== "Default" && currentCharacter && (
+          <div className="fixed bottom-6 left-6 flex items-center space-x-4 bg-gray-200 rounded-lg p-4 shadow-md max-w-sm">
             <img
               src={currentCharacter.imageUrl}
               alt={currentCharacter.name}
-              className="w-16 h-16 rounded-full object-cover sm:mb-0 mb-4"
+             className="w-16 h-16 rounded-full object-cover"
             />
-            <div className="flex flex-col text-center sm:text-left">
-              <p className="text-lg font-bold text-gray-700">{currentCharacter.name}</p>
-              <p className="text-sm text-gray-600 italic">{currentCharacter.description}</p>
-            </div>
+          <div className="flex flex-col text-left">
+            <p className="text-lg font-bold text-gray-700">
+            {currentCharacter.name}
+              </p>
+            <p className="text-sm text-gray-600 italic">
+              {currentCharacter.description}
+            </p>
+          </div>
          </div>
         )}
 
