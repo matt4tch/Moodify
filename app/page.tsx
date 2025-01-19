@@ -10,6 +10,8 @@ import { setDefaultAutoSelectFamily } from 'net';
 import aiService from '../lib/aiService';
 import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import Modal from 'react-modal';
+import LoginComponent from "@/components/LoginComponent";
 
 const characters = [
   { id: 0, name: 'Default', 
@@ -107,6 +109,7 @@ export default function AIPromptChat() {
   const [showResponse, setShowResponse] = useState(false);
   const responseRef = useRef<HTMLDivElement>(null);
   const [aiSuggestion, setAiSuggestion] = useState('');
+  const [loginModalOpen, setLoginModalOpen] = useState(true);
   const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
   const [displayingOldMessage, setDisplayingOldMessage] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -128,7 +131,12 @@ export default function AIPromptChat() {
       setAiSuggestion(response);
     }
 
-  } 
+  }
+
+  const closeModal = () => {
+      // When modal is closed.
+      setLoginModalOpen(false);
+  }
 
   //const debounceGetSuggestion = debounce(getSuggestion, 500, { leading: false, trailing: true });
   const debounceGetSuggestion = useRef(debounce(getSuggestion, 500, { leading: false, trailing: true })).current;
@@ -440,6 +448,33 @@ export default function AIPromptChat() {
           />
         </div>
       </div>
+        <Modal
+            isOpen={loginModalOpen}
+            style={{
+                overlay: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dim background
+                    zIndex: 1000, // High z-index for overlay
+                },
+                content: {
+                    top: '50%',
+                    left: '50%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    marginRight: '-50%',
+                    // transform: 'translate(-50%, -50%)',
+                    zIndex: 1001, // Higher than overlay
+                    // position: 'fixed', // Ensures the modal stays in place
+                    color: 'blue',
+                }
+            }}
+            onRequestClose={() => toast.error('Please login first!')}
+            // contentLabel="Example Modal"
+        >
+            {/*<h2>Modal Title</h2>*/}
+            {/*<button onClick={closeModal}>Close</button>*/}
+            {/*<div>Modal Content</div>*/}
+            <LoginComponent aCloseModal={closeModal} />
+        </Modal>
     </div>
     
   );
