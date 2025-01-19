@@ -7,10 +7,10 @@ export default async function handler(req, res) {
             const body = await req.body;
             const { userId, user_prompt, ai_response, summary_character } = body;
     
-            const currentDate = new Date();
-            const currentDay = currentDate.getDate();
-            const currentMonth = currentDate.getMonth() + 1;
-            const currentYear = currentDate.getFullYear();
+            //const currentDate = new Date();
+            const currentDay = 18 //currentDate.getDate();
+            const currentMonth = 1  //currentDate.getMonth() + 1;
+            const currentYear = 2025 //currentDate.getFullYear();
     
             const newMessage = await prisma.messages.create({
                 data: {
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     
             const deletedMessage = await prisma.messages.delete({
                 where: {
-                    id: 2,
+                    id: 5,
                 }
             });
     

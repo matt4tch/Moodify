@@ -273,10 +273,10 @@ export default function AIPromptChat() {
         );
         console.log("AI Response:", response);
         setAiResponse(response); // Update with the new response
+        setAiSuggestion('');
         await saveMessageToDB(input, response);
         console.log("Message saved to db");
         setDisplayingOldMessage(true);
-
       }
       } catch (error) {
         console.error("Error fetching AI response:", error);
