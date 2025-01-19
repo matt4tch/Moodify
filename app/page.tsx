@@ -285,19 +285,22 @@ export default function AIPromptChat() {
               className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
             >
               <div className="flex items-center mb-4">
-                {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
-                  <img
-                    src={summaryCharacterData.imageUrl}
-                    alt={summaryCharacterData.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                )}
-                <h3 className="text-xl font-bold">
-                  {summaryCharacterData
-                    ? `${summaryCharacterData.name}'s Summary`
-                    : 'Summary'}
-                </h3>
-              </div>
+            {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
+              <>
+              <img
+              src={summaryCharacterData.imageUrl}
+              alt={summaryCharacterData.name}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+              <h3 className="text-xl font-bold">
+                {summaryCharacterData.name}'s Summary
+              </h3>
+          </>
+          )}
+           {summaryCharacterData && summaryCharacterData.name === 'Default' && (
+             <h3 className="text-xl font-bold"> Summary</h3>
+            )}
+</div>
               <p className="text-lg whitespace-pre-wrap">
                 {aiResponse}
               </p>
