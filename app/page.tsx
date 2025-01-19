@@ -157,6 +157,8 @@ export default function AIPromptChat() {
               setShowResponse(false); // Ensure response box is displayed
               setDisplayingOldMessage(false);
               setInput('');
+              setAiResponse('');
+              setAiSuggestion('');
             }
             return null;
         } catch (error) {
@@ -164,6 +166,8 @@ export default function AIPromptChat() {
             setShowResponse(false); // Ensure response box is displayed
             setDisplayingOldMessage(false);
             setInput('');
+            setAiResponse('');
+            setAiSuggestion('');
             return null;
         }
     }
