@@ -4,7 +4,7 @@ import { useEffect, useState, useRef , useMemo} from 'react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
 import { DayPicker } from 'react-day-picker';
-import { debounce } from 'lodash';
+import { debounce, set } from 'lodash';
 import "react-day-picker/style.css";
 import { setDefaultAutoSelectFamily } from 'net';
 import aiService from '../lib/aiService';
@@ -96,6 +96,7 @@ export default function AIPromptChat() {
   const responseRef = useRef<HTMLDivElement>(null);
   const [aiSuggestion, setAiSuggestion] = useState('');
   const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
+  const [displayingOldMessage, setDisplayingOldMessage] = useState(false);
 
   const getSuggestion = async (text : string) => {
     if (!text) {
@@ -149,15 +150,20 @@ export default function AIPromptChat() {
               console.log(data["ai_response"]);
               setAiResponse(data["ai_response"]);
               setInput(data["user_prompt"]);
+              setSummaryCharacter(data["selected_character"]);
               setShowResponse(true); // Ensure response box is displayed
-              setSummaryCharacter(selectedCharacter); // Set selected character for summary display
+              setDisplayingOldMessage(true);
             } else {
               setShowResponse(false); // Ensure response box is displayed
+              setDisplayingOldMessage(false);
+              setInput('');
             }
             return null;
         } catch (error) {
             console.error('Error in getMessages:', error);
             setShowResponse(false); // Ensure response box is displayed
+            setDisplayingOldMessage(false);
+            setInput('');
             return null;
         }
     }
@@ -295,6 +301,7 @@ export default function AIPromptChat() {
                 value={input}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+                readOnly={displayingOldMessage}
                 placeholder="What would you like to reflect on today?"
                 className="absolute inset-0 w-full h-full p-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-10"
               />
@@ -309,14 +316,14 @@ export default function AIPromptChat() {
               />
             </div>
 
-            <Button
+            {(!displayingOldMessage) && (<Button
               type="submit"
               className="w-full py-6 text-lg bg-blue-500 hover:bg-blue-600 text-white font-mono"
             >
               {selectedCharacter && selectedCharacter !== 'Default'
                 ? `Summarize with ${selectedCharacter}`
                 : 'Summarize'}
-            </Button>
+            </Button>)}
             <ToastContainer
               position="top-right"
               autoClose={5000}
