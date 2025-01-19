@@ -1,3 +1,5 @@
+A web application that serves as an AI-powered journal, designed to enhance self-reflection and promote positive thinking. The app features built-in text autocomplete to help users frame their thoughts more constructively. Upon submitting a journal entry, users have the option to generate an AI-generated summary from either a generic character or a variety of fictional and real-life characters, offering unique and personalized perspectives. This feature allows users to see their day through different lenses, making the journaling experience both engaging and insightful. Developed during UofTHacks 12.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
