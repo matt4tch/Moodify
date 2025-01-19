@@ -304,7 +304,7 @@ export default function AIPromptChat() {
     <div className="font-mono min-h-screen flex flex-col">
       {/* Title Section */}
       <header className="text-blue-500 text-center py-4">
-        <h1 className="text-3xl font-bold">PosiLog</h1>
+        <h1 className="text-3xl font-bold">Moodify</h1>
       </header>
 
       {/* Main Layout - Split into three sections */}

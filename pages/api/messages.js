@@ -62,9 +62,12 @@ export default async function handler(req, res) {
             const body = await req.body;
             const { messageId, new_user_prompt, new_ai_response } = body;
     
-            const updatedMessage = await prisma.messages.update({
+            const updatedMessage = await prisma.messages.updateMany({
                 where: {
-                    id: messageId,
+                    userId: parseInt(userId),
+                    day: parseInt(day),
+                    month: parseInt(month),
+                    year: parseInt(year),
                 },
                 data: {
                     user_prompt: new_user_prompt,
