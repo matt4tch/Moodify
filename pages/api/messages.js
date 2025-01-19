@@ -5,9 +5,9 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
             const body = await req.body;
-            const { userId, user_prompt, ai_response } = body;
+            const { userId, user_prompt, ai_response, summary_character } = body;
     
-            const currentDate = new Date();
+            //const currentDate = new Date();
             const currentDay = currentDate.getDate();
             const currentMonth = currentDate.getMonth() + 1;
             const currentYear = currentDate.getFullYear();
@@ -19,6 +19,7 @@ export default async function handler(req, res) {
                     year: currentYear,
                     user_prompt,
                     ai_response,
+                    selected_character: summary_character,
                     user: {
                         connect: {
                             id: userId,
@@ -79,13 +80,17 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'DELETE') {
         try {
-            const body = await req.body;
-            const { messageId } = body;
+            const { userId, day, month, year } = req.body;
+            console.log("Request Body:", { userId, day, month, year })
+            
+            if (!userId || !day || !month || !year) {
+                return res.status(400).json({ message: 'Missing required fields' });
+            }
     
             const deletedMessage = await prisma.messages.delete({
                 where: {
-                    id: messageId,
-                },
+                    id: 5,
+                }
             });
     
             return res.status(200).json(deletedMessage);
