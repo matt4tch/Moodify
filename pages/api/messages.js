@@ -87,9 +87,18 @@ export default async function handler(req, res) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
     
-            const deletedMessage = await prisma.messages.delete({
+            // const deletedMessage = await prisma.messages.delete({
+            //     where: {
+            //         id: 5,
+            //     }
+            // });
+
+            const deletedMessage = await prisma.messages.deleteMany({
                 where: {
-                    id: 5,
+                    userId: parseInt(userId),
+                    day: parseInt(day),
+                    month: parseInt(month),
+                    year: parseInt(year),
                 }
             });
     

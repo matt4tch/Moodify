@@ -14,7 +14,7 @@ const page = () => {
                 method: 'DELETE',
                 body: JSON.stringify({
                     userId: 1, // Provide userId dynamically if necessary
-                    day: 19,
+                    day: 18,
                     month: 1,
                     year: 2025,
                 }),

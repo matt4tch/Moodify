@@ -109,6 +109,14 @@ export default function AIPromptChat() {
   const [aiSuggestion, setAiSuggestion] = useState('');
   const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
   const [displayingOldMessage, setDisplayingOldMessage] = useState(false);
+  const [editing, setEditing] = useState(false);
+
+  const handleEdit = () => {
+    setEditing(true);
+    setDisplayingOldMessage(false);
+    setAiResponse('');
+    setAiSuggestion('');
+  }
 
   const getSuggestion = async (text : string) => {
     if (!text) {
@@ -362,6 +370,8 @@ export default function AIPromptChat() {
                       
               />
             </div>
+
+            {(displayingOldMessage) && (<button onClick={handleEdit()}>Edit</button>) }
 
             {(!displayingOldMessage) && (<Button
               type="submit"
