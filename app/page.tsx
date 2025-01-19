@@ -293,6 +293,7 @@ export default function AIPromptChat() {
               
               <textarea
                 value={input}
+                readOnly={selected < new Date(new Date().setHours(0, 0, 0, 0))}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="What would you like to reflect on today?"
@@ -333,7 +334,7 @@ export default function AIPromptChat() {
           
           {/* Response Box */}
 
-            {showResponse && (
+            {showResponse && summaryCharacterData ? (
               <div
                 ref={responseRef}
                 className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
@@ -359,7 +360,10 @@ export default function AIPromptChat() {
                   {aiResponse}
                 </p>
               </div>
-            )}
+            )
+            :
+            null
+            }
           
           
 
