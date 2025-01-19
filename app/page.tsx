@@ -13,7 +13,7 @@ import aiService from '../lib/aiService';
 const characters = [
   { id: 0, name: 'Default', 
         imageUrl: '/images/default.png', 
-        context: "You are a neutral assistant designed to summarize the user's daily journal entry. Provide a clear, concise summary that sticks to the facts, avoiding personal opinions or creative embellishments. While maintaining neutrality, add a hopeful and positive tone to help the user see the brighter side of their experiences", 
+        context: "You are a neutral assistant designed to summarize the user's daily journal entry. Provide a clear, concise summary that sticks to the facts, avoiding personal opinions or creative embellishments. While maintaining neutrality, add a hopeful and positive tone to help the user see the brighter side of their experiences. Don't refer to the User as 'User' instead use personal pronouns when summarizing", 
         description: "" },
   { id: 1, name: 'Gordon Ramsay', 
         imageUrl: '/Gordan.png', 
@@ -25,7 +25,7 @@ const characters = [
         description: "“Making your day, stay out of the gray, for zero pay. Once you talk to me, I’ll make you feel like a G, and again, it's for free.”" },
   { id: 3, name: 'Costco Guys', 
         imageUrl: '/Costco%20Guys.png', 
-        context: "You are one of the Costco Guys, the father-and-son duo known for their love of Costco, quirky humor, and unshakable positivity. Summarize the user's daily journal entry in a fun, laid-back tone, packed with relatable comparisons, lighthearted jokes, and Costco-inspired flair. Channel the vibe of two friends having a short chat while sampling snacks in the food court or loading oversized items into their cart. Stay relentlessly positive, turning even bad days into BOOMS. Feel free to add emojis that capture your upbeat and energetic style. 🛒🍪🔥", 
+        context: "You are one of the Costco Guys, the father-son duo, AJ and Big Justice, known for their quirky Costco-themed TikTok videos and viral humor. With catchphrases like 'We're Costco Guys' and their 'Boom or Doom' rating system, they bring charm, energy, and offbeat humor to everything they do.\n\nSummarize the user's daily journal entry in a short, fun, and lighthearted tone. Use relatable comparisons, Costco-inspired flair, and a positive spin to turn even bad days into BOOMS. Keep it concise and engaging, like a quick chat while grabbing snacks at the food court. Feel free to sprinkle in emojis to match your upbeat energy. 🛒🍪🔥",
         description: "“We bring the BOOM to your life, which will make you smile as much as we smile when we see the DOUBLE CHUNK CHOCOLATE COOKIE!”" },
   { id: 4, name: 'Bowser', 
         imageUrl: '/Bowser.webp', 
@@ -44,7 +44,7 @@ const characters = [
 const prompt = `
 You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity.
 Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows
-the user to continue reflecting more positively on their day. Make it short. Just a few words. Max 5 words.
+the user to continue reflecting more positively on their day. Make it short. Just a few words. Make sure your response flows well with the input sentence, and connects in a way that make sense. Dont forget commas where needed. Max 5 words. Do not add quotation marks to the response.
 
 Examples:
 Input: "I'm having a very bad day and I"
@@ -83,12 +83,23 @@ export default function AIPromptChat() {
   } 
 
   //const debounceGetSuggestion = debounce(getSuggestion, 500, { leading: false, trailing: true });
-  const debounceGetSuggestion = useRef(debounce(getSuggestion, 1000, { leading: false, trailing: true })).current;
+  const debounceGetSuggestion = useRef(debounce(getSuggestion, 500, { leading: false, trailing: true })).current;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setInput(e.target.value);
       debounceGetSuggestion(e.target.value); 
     }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab' && aiSuggestion ) {
+      e.preventDefault();
+      setInput(input + " " + aiSuggestion);
+      setAiSuggestion('');
+
+    } else {
+      setAiSuggestion('');
+    }
+   }
 
 
   const testApiService = async () => {
@@ -241,20 +252,23 @@ export default function AIPromptChat() {
         {/* Middle Section: Text Box, Submit Button, and Response Box */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-            <div>
+
+            <div className="relative w-full h-[653px] mb-4">
               <textarea
                 value={input}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 placeholder="What would you like to reflect on today?"
-                className="w-full h-[calc(100vh-12rem)] p-4 mb-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-50" // bg-gray-100
+                className="absolute inset-0 w-full h-full p-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-10"
               />
 
               <textarea
                       value={input+ " " + aiSuggestion}
+                      readOnly
                       onChange={() => {}}
                       placeholder="What would you like to reflect on today?"
-                      className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 text-gray-500 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg z-0"
-                      style={{ position: 'relative', top: -653, zIndex: -1 }}
+                      className="absolute inset-0 w-full h-full p-4 bg-gray-100 border-2 text-gray-500 border-gray-300 rounded-md resize-none font-mono text-lg z-0"
+                      
               />
             </div>
 
