@@ -141,6 +141,32 @@ export default function AIPromptChat() {
     }
    }
 
+
+
+  const saveMessageToDB = async (userPrompt: string, aiResponse: string ) => {
+      try {
+          console.log("Making Message");
+          const res = await fetch('/api/messages', {
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              method: 'POST',
+              body: JSON.stringify({
+                  userId: 1,
+                  user_prompt: userPrompt,
+                  ai_response: aiResponse,
+                  summary_character: summaryCharacter,
+              })
+          });
+          const data = await res.json();
+          console.log("Created Message:", data);
+
+      } catch (error) {
+          console.log("Error:", error);
+      }
+
+    }
+
     const getMessage = async (date: Date, userId: number) => {
         try {
             const params = new URLSearchParams({
@@ -247,6 +273,10 @@ export default function AIPromptChat() {
         );
         console.log("AI Response:", response);
         setAiResponse(response); // Update with the new response
+        await saveMessageToDB(input, response);
+        console.log("Message saved to db");
+        setDisplayingOldMessage(true);
+
       }
       } catch (error) {
         console.error("Error fetching AI response:", error);
