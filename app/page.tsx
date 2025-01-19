@@ -44,7 +44,7 @@ const characters = [
 const prompt = `
 You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity.
 Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows
-the user to continue reflecting more positively on their day. Make it short. Just a few words. Max 5 words.
+the user to continue reflecting more positively on their day. Make it short. Just a few words. Make sure your response flows well with the input sentence, and connects in a way that make sense. Dont forget commas where needed. Max 5 words.
 
 Examples:
 Input: "I'm having a very bad day and I"
@@ -89,6 +89,17 @@ export default function AIPromptChat() {
       setInput(e.target.value);
       debounceGetSuggestion(e.target.value); 
     }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Tab' && aiSuggestion ) {
+      e.preventDefault();
+      setInput(input + aiSuggestion);
+      setAiSuggestion('');
+
+    } else {
+      setAiSuggestion('');
+    }
+   }
 
 
   const testApiService = async () => {
@@ -237,20 +248,23 @@ export default function AIPromptChat() {
         {/* Middle Section: Text Box, Submit Button, and Response Box */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-            <div>
+
+            <div className="relative w-full h-[653px] mb-4">
               <textarea
                 value={input}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 placeholder="What would you like to reflect on today?"
-                className="w-full h-[calc(100vh-12rem)] p-4 mb-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-50" // bg-gray-100
+                className="absolute inset-0 w-full h-full p-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-10"
               />
 
               <textarea
                       value={input+ " " + aiSuggestion}
+                      readOnly
                       onChange={() => {}}
                       placeholder="What would you like to reflect on today?"
-                      className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 text-gray-500 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg z-0"
-                      style={{ position: 'relative', top: -653, zIndex: -1 }}
+                      className="absolute inset-0 w-full h-full p-4 bg-gray-100 border-2 text-gray-500 border-gray-300 rounded-md resize-none font-mono text-lg z-0"
+                      
               />
             </div>
 
