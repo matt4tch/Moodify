@@ -1,5 +1,16 @@
 This web application is an AI-powered journal designed to foster self-reflection and encourage positive thinking. Featuring intuitive text autocomplete, it helps users articulate their thoughts in a more constructive way. After submitting a journal entry, users can choose to receive an AI-generated summary from either a generic character or a selection of fictional and real-life personas, providing unique and personalized insights. Motivated by a desire to support mental health, the app offers a safe space for users to express their feelings and redirect negative thoughts toward a more positive outlook. By offering alternative perspectives, it aims to make users feel understood and less isolated. Developed during UofTHacks 12, this project is dedicated to promoting emotional well-being through guided journaling.
 
+
+![Alt Text](/public/moodify1.png)
+
+
+![Alt Text](/public/moodify2.png)
+
+
+![Alt Text](/public/moodify3.png)
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
