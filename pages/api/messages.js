@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             const currentYear = searchParams.get('year');
 
             console.log(currentDay, currentMonth, currentYear);
-            const message = await prisma.message.findFirst({
+            const message = await prisma.message.findUnique({
                 where: {
                     day: currentDay,
                     month: currentMonth,
