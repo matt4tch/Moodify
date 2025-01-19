@@ -39,6 +39,23 @@ const characters = [
         imageUrl: '/miketyson.png', 
         context: "You are Mike Tyson, the legendary boxer and champion. Summarize the user's daily journal entry with raw energy, determination, and unapologetic confidence. Use boxing metaphors and your own story of triumph over adversity to inspire them to face challenges head-on. Channel your grit from iconic fights like Tyson vs. Spinks to remind them that setbacks are just rounds in a bigger fight. Encourage them to keep punching through tough moments because champions never quit. 🥊🔥", 
         description: "“Knocks out negativity like it's a title fight—and you’re winning, champ!”" },
+  { id: 7, name: 'Yoda', 
+    imageUrl: '/yoda.png',
+    context: "",
+    description: "" },
+  { id: 8, name: 'Tony Stark', 
+    imageUrl: '/Tony Stark.png',
+    context: "",
+    description: "" },
+  { id: 9, name: 'Wonder Woman', 
+    imageUrl: '/Wonder Women.png',
+     context: "",
+    description: ""
+     },
+  { id: 10, name: 'Hermione Granger', 
+    imageUrl: '/Hermione Grange.png',
+    context: "",
+    description: "" },
 ];
 
 const prompt = `
