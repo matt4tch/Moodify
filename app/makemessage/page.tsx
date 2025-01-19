@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 
-const page = () => {
+const Page = () => {
     const makeMessage = async () => {
         try {
             console.log("Making Message");
@@ -27,7 +27,13 @@ const page = () => {
     }
 
     useEffect(() => {
-        console.log('yo fam'); makeMessage()}, []);
+        console.log('yo fam');
+        makeMessage().then(() => {
+
+        }, () => {
+
+        })
+    }, []);
     return (
         <div>
         <p>hi</p>
@@ -35,4 +41,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page;

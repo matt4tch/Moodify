@@ -35,11 +35,12 @@ export default function LoginComponent({ aCloseModal }: { aCloseModal?: () => vo
                                             <label htmlFor="username" className="block text-base text-gray-700">
                                                 Username
                                             </label>
-                                            {React.cloneElement(fields.username, {
-                                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value),
-                                                value: username,
-                                                className: "w-full px-4 py-3 bg-transparent border border-gray-300 rounded focus:outline-none focus:border-[#4361EE] focus:ring-0 font-mono"
-                                            })}
+                                            <input
+                                                type="text"
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                                                value={username}
+                                                className="w-full px-4 py-3 bg-transparent border border-gray-300 rounded focus:outline-none focus:border-[#4361EE] focus:ring-0 font-mono"
+                                            />
                                         </div>
                                     )}
                                     {fields.password && (
@@ -47,11 +48,12 @@ export default function LoginComponent({ aCloseModal }: { aCloseModal?: () => vo
                                             <label htmlFor="password" className="block text-base text-gray-700">
                                                 Password
                                             </label>
-                                            {React.cloneElement(fields.password, {
-                                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
-                                                value: password,
-                                                className: "w-full px-4 py-3 bg-transparent border border-gray-300 rounded focus:outline-none focus:border-[#4361EE] focus:ring-0 font-mono"
-                                            })}
+                                            <input
+                                                type="password"
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                                                value={password}
+                                                className="w-full px-4 py-3 bg-transparent border border-gray-300 rounded focus:outline-none focus:border-[#4361EE] focus:ring-0 font-mono"
+                                            />
                                         </div>
                                     )}
                                 </div>

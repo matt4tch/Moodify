@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
 
-const page = () => {
+const Page = () => {
 
 
     const deleteMessage = async () => {
@@ -29,7 +29,13 @@ const page = () => {
 
     }
 
-    useEffect(() => {deleteMessage()}, []);
+    useEffect(() => {
+        deleteMessage().then(() => {
+
+        }, () => {
+
+        })
+    }, []);
 
     return (
         <div>
@@ -38,4 +44,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

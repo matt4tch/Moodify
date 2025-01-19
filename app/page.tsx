@@ -11,6 +11,7 @@ import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
 import LoginComponent from "@/components/LoginComponent";
+import Image from 'next/image';
 
 const characters = [
   { id: 0, name: 'Default', 
@@ -278,17 +279,20 @@ export default function AIPromptChat() {
           });
         }
         else{
-        const response: string = await aiService(
+        const response = await aiService(
           selectedCharacter ? input_context : "",
           input,
           "gpt-4"
         );
-        console.log("AI Response:", response);
-        setAiResponse(response); // Update with the new response
-        setAiSuggestion('');
-        await saveMessageToDB(input, response);
-        console.log("Message saved to db");
-        setDisplayingOldMessage(true);
+
+        if(response){
+            console.log("AI Response:", response);
+            setAiResponse(response); // Update with the new response
+            setAiSuggestion('');
+            await saveMessageToDB(input, response);
+            console.log("Message saved to db");
+            setDisplayingOldMessage(true);
+        }
       }
       } catch (error) {
         console.error("Error fetching AI response:", error);
@@ -325,13 +329,14 @@ export default function AIPromptChat() {
                   </p>
                 )
               }
+              required={true}
             />
           </div>
 
           {selectedCharacter !== "Default" && currentCharacter && (
             <div className="bg-gray-200 rounded-lg p-4 shadow-md w-full">
               <div className="flex items-center space-x-4">
-                <img
+                <Image
                   src={currentCharacter.imageUrl}
                   alt={currentCharacter.name}
                   className="w-24 h-24 rounded-full object-cover"
@@ -357,7 +362,7 @@ export default function AIPromptChat() {
               
               <textarea
                 value={input}
-                readOnly={selected < new Date(new Date().setHours(0, 0, 0, 0))}
+                // readOnly={selected < new Date(new Date().setHours(0, 0, 0, 0))}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 readOnly={displayingOldMessage}
@@ -409,13 +414,13 @@ export default function AIPromptChat() {
                 <div className="flex items-center mb-4">
               {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
                 <>
-                <img
+                <Image
                 src={summaryCharacterData.imageUrl}
                 alt={summaryCharacterData.name}
                 className="w-12 h-12 rounded-full mr-4"
               />
                 <h3 className="text-xl font-bold">
-                  {summaryCharacterData.name}'s Summary
+                  {summaryCharacterData.name}&apos;s Summary
                 </h3>
             </>
             )}
@@ -445,6 +450,7 @@ export default function AIPromptChat() {
         </div>
       </div>
         <Modal
+            ariaHideApp={false}
             isOpen={loginModalOpen}
             style={{
                 overlay: {

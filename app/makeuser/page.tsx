@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 
-const page = () => {
+const Page = () => {
 
     const makeUser = async () => {
         const res = await fetch('api/users', {
@@ -26,4 +26,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page;
