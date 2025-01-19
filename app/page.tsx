@@ -156,20 +156,30 @@ export default function AIPromptChat() {
 
   const input_context = currentCharacter?.context || "";
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (selectedCharacter) {
-        setShowResponse(true);
-        setSummaryCharacter(selectedCharacter);
-       const response = aiService( input_context, input, "gpt-4");
-       console.log("AI Response ?????:", response)
-    } else {
-      let input_context = ""
-      setShowResponse(true);
-      setSummaryCharacter(selectedCharacter);
-      aiService(input_context, input, "gpt-4");
-    }
-  };
+  const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      e.preventDefault();
+      
+      // Reset AI response to show loading state
+      setAiResponse("Loading response...");
+      
+      setShowResponse(true); // Ensure response box is displayed
+      setSummaryCharacter(selectedCharacter); // Set selected character for summary display
+    
+      try {
+        const response: string = await aiService(
+          selectedCharacter ? input_context : "",
+          input,
+          "gpt-4"
+        );
+        console.log("AI Response:", response);
+        setAiResponse(response); // Update with the new response
+      } catch (error) {
+        console.error("Error fetching AI response:", error);
+        setAiResponse("Sorry, something went wrong. Please try again."); // Error fallback
+      }
+    };
 
   return (
     <div className="font-mono min-h-screen flex flex-col">
@@ -275,10 +285,11 @@ export default function AIPromptChat() {
                 </h3>
               </div>
               <p className="text-lg whitespace-pre-wrap">
-                {input}
+                {aiResponse}
               </p>
             </div>
           )}
+
         </div>
 
         {/* Right Section: Character Menu Sidebar */}
