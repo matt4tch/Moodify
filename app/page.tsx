@@ -8,7 +8,8 @@ import { debounce } from 'lodash';
 import "react-day-picker/style.css";
 import { setDefaultAutoSelectFamily } from 'net';
 import aiService from '../lib/aiService';
-
+import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const characters = [
   { id: 0, name: 'Default', 
@@ -158,15 +159,35 @@ export default function AIPromptChat() {
   const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      console.log("test");
+      
       e.preventDefault();
       
       // Reset AI response to show loading state
+
       setAiResponse("Loading response...");
-      
+      if(!input.trim()){
+        setShowResponse(false);
+      }
+      else{
       setShowResponse(true); // Ensure response box is displayed
+      }
       setSummaryCharacter(selectedCharacter); // Set selected character for summary display
     
       try {
+        if (!input.trim()) {
+        toast.error("Can't submit an empty textbox!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+        }
+        else{
         const response: string = await aiService(
           selectedCharacter ? input_context : "",
           input,
@@ -174,6 +195,7 @@ export default function AIPromptChat() {
         );
         console.log("AI Response:", response);
         setAiResponse(response); // Update with the new response
+      }
       } catch (error) {
         console.error("Error fetching AI response:", error);
         setAiResponse("Sorry, something went wrong. Please try again."); // Error fallback
@@ -236,8 +258,9 @@ export default function AIPromptChat() {
         {/* Middle Section: Text Box, Submit Button, and Response Box */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-
+            
             <div className="relative w-full h-[653px] mb-4">
+              
               <textarea
                 value={input}
                 onChange={handleInputChange}
@@ -264,36 +287,51 @@ export default function AIPromptChat() {
                 ? `Summarize with ${selectedCharacter}`
                 : 'Summarize'}
             </Button>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />  
           </form>
-
+          
           {/* Response Box */}
-          {showResponse && (
-            <div
-              ref={responseRef}
-              className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
-            >
-              <div className="flex items-center mb-4">
-            {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
-              <>
-              <img
-              src={summaryCharacterData.imageUrl}
-              alt={summaryCharacterData.name}
-              className="w-12 h-12 rounded-full mr-4"
-            />
-              <h3 className="text-xl font-bold">
-                {summaryCharacterData.name}'s Summary
-              </h3>
-          </>
-          )}
-           {summaryCharacterData && summaryCharacterData.name === 'Default' && (
-             <h3 className="text-xl font-bold"> Summary</h3>
+
+            {showResponse && (
+              <div
+                ref={responseRef}
+                className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
+              >
+                <div className="flex items-center mb-4">
+              {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
+                <>
+                <img
+                src={summaryCharacterData.imageUrl}
+                alt={summaryCharacterData.name}
+                className="w-12 h-12 rounded-full mr-4"
+              />
+                <h3 className="text-xl font-bold">
+                  {summaryCharacterData.name}'s Summary
+                </h3>
+            </>
             )}
-</div>
-              <p className="text-lg whitespace-pre-wrap">
-                {aiResponse}
-              </p>
+             {summaryCharacterData && summaryCharacterData.name === 'Default' && (
+               <h3 className="text-xl font-bold"> Summary</h3>
+              )}
             </div>
-          )}
+                <p className="text-lg whitespace-pre-wrap">
+                  {aiResponse}
+                </p>
+              </div>
+            )}
+          
+          
 
         </div>
 
@@ -306,5 +344,6 @@ export default function AIPromptChat() {
         </div>
       </div>
     </div>
+    
   );
 }
