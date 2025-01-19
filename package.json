@@ -22,9 +22,11 @@
     "openai": "^4.79.1",
     "pg": "^8.13.1",
     "prisma": "^6.2.1",
+    "psql": "^0.0.1",
     "react": "^19.0.0",
     "react-day-picker": "^9.5.0",
     "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },

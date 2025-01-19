@@ -8,7 +8,8 @@ import { debounce } from 'lodash';
 import "react-day-picker/style.css";
 import { setDefaultAutoSelectFamily } from 'net';
 import aiService from '../lib/aiService';
-
+import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const characters = [
   { id: 0, name: 'Default', 
@@ -39,6 +40,26 @@ const characters = [
         imageUrl: '/miketyson.png', 
         context: "You are Mike Tyson, the legendary boxer and champion. Summarize the user's daily journal entry with raw energy, determination, and unapologetic confidence. Use boxing metaphors and your own story of triumph over adversity to inspire them to face challenges head-on. Channel your grit from iconic fights like Tyson vs. Spinks to remind them that setbacks are just rounds in a bigger fight. Encourage them to keep punching through tough moments because champions never quit. 🥊🔥", 
         description: "“Knocks out negativity like it's a title fight—and you’re winning, champ!”" },
+        { id: 7, name: 'Yoda', 
+          imageUrl: '/yoda.png',
+          context: "You are Yoda, the wise Jedi Master from the Star Wars universe. Summarize the user's daily journal entry in your iconic, reversed syntax. Offer guidance and encouragement rooted in Jedi wisdom. Highlight challenges as opportunities for growth and remind them to trust in their strength and the Force. Use your calm and patient tone to inspire reflection and perseverance.🌌 The Force is strong in you, it is. Inspire, you must.",
+          description: "“Help you reflect, I will. Strength and wisdom, find you shall.”" 
+      },
+      { id: 8, name: 'Tony Stark', 
+          imageUrl: '/Tony Stark.png',
+          context: "You are Tony Stark, the genius billionaire, playboy, philanthropist, and Iron Man. Summarize the user's daily journal entry with sharp wit, confidence, and a touch of sarcasm. Highlight their successes as if they’re engineering marvels and offer tech-savvy advice for tackling their challenges. Keep the tone dynamic, clever, and motivational—much like a pep talk from a superhero with an ego and a heart of gold. 💡🦾",
+          description: "“Making your day feel as innovative as a Stark Industries prototype.”" 
+      },
+      { id: 9, name: 'Wonder Woman', 
+          imageUrl: '/Wonder Women.png',
+          context: "You are Wonder Woman, the Amazonian warrior and symbol of truth and justice. Summarize the user's daily journal entry with strength, compassion, and wisdom. Frame their challenges as heroic trials and their victories as triumphs for humanity. Inspire courage, resilience, and integrity in every word, reminding them of their inner warrior.💪🌟",
+          description: "“Championing your journey with the wisdom of Themyscira.”" 
+      },
+      { id: 10, name: 'Hermione Granger', 
+          imageUrl: '/Hermione Grange.png',
+          context: "You are Hermione Granger, the brightest witch of your age. Summarize the user's daily journal entry with intelligence, precision, and a touch of magical flair. Offer practical advice and encouragement, much like helping a friend through a particularly tricky spell. Highlight their problem-solving skills and remind them that, with perseverance and a little cleverness, they can achieve anything. Making sure to not refer to user as 'User' and instead using personal pronouns",
+          description: "“Turning your daily struggles into triumphs with a flick of wit and wisdom.”" 
+      }
 ];
 
 const prompt = `
@@ -168,15 +189,35 @@ export default function AIPromptChat() {
   const input_context = currentCharacter?.context || "";
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      console.log("test");
+      
       e.preventDefault();
       
       // Reset AI response to show loading state
+
       setAiResponse("Loading response...");
-      
+      if(!input.trim()){
+        setShowResponse(false);
+      }
+      else{
       setShowResponse(true); // Ensure response box is displayed
+      }
       setSummaryCharacter(selectedCharacter); // Set selected character for summary display
     
       try {
+        if (!input.trim()) {
+        toast.error("Can't submit an empty textbox!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+        }
+        else{
         const response: string = await aiService(
           selectedCharacter ? input_context : "",
           input,
@@ -184,6 +225,7 @@ export default function AIPromptChat() {
         );
         console.log("AI Response:", response);
         setAiResponse(response); // Update with the new response
+      }
       } catch (error) {
         console.error("Error fetching AI response:", error);
         setAiResponse(""); // Error fallback
@@ -246,8 +288,9 @@ export default function AIPromptChat() {
         {/* Middle Section: Text Box, Submit Button, and Response Box */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-
+            
             <div className="relative w-full h-[653px] mb-4">
+              
               <textarea
                 value={input}
                 onChange={handleInputChange}
@@ -274,36 +317,51 @@ export default function AIPromptChat() {
                 ? `Summarize with ${selectedCharacter}`
                 : 'Summarize'}
             </Button>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={false}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />  
           </form>
-
+          
           {/* Response Box */}
-          {showResponse && (
-            <div
-              ref={responseRef}
-              className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
-            >
-              <div className="flex items-center mb-4">
-            {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
-              <>
-              <img
-              src={summaryCharacterData.imageUrl}
-              alt={summaryCharacterData.name}
-              className="w-12 h-12 rounded-full mr-4"
-            />
-              <h3 className="text-xl font-bold">
-                {summaryCharacterData.name}'s Summary
-              </h3>
-          </>
-          )}
-           {summaryCharacterData && summaryCharacterData.name === 'Default' && (
-             <h3 className="text-xl font-bold"> Summary</h3>
+
+            {showResponse && (
+              <div
+                ref={responseRef}
+                className="mt-6 p-6 bg-white border-2 border-gray-300 rounded-lg shadow-lg transition-all duration-300 ease-in-out"
+              >
+                <div className="flex items-center mb-4">
+              {summaryCharacterData && summaryCharacterData.name !== 'Default' && (
+                <>
+                <img
+                src={summaryCharacterData.imageUrl}
+                alt={summaryCharacterData.name}
+                className="w-12 h-12 rounded-full mr-4"
+              />
+                <h3 className="text-xl font-bold">
+                  {summaryCharacterData.name}'s Summary
+                </h3>
+            </>
             )}
-</div>
-              <p className="text-lg whitespace-pre-wrap">
-                {aiResponse}
-              </p>
+             {summaryCharacterData && summaryCharacterData.name === 'Default' && (
+               <h3 className="text-xl font-bold"> Summary</h3>
+              )}
             </div>
-          )}
+                <p className="text-lg whitespace-pre-wrap">
+                  {aiResponse}
+                </p>
+              </div>
+            )}
+          
+          
 
         </div>
 
@@ -316,5 +374,6 @@ export default function AIPromptChat() {
         </div>
       </div>
     </div>
+    
   );
 }

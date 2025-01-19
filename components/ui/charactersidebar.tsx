@@ -10,6 +10,10 @@ const characters = [
   { id: 4, name: 'Bowser', imageUrl: '/Bowser.webp' },
   { id: 5, name: 'Morgan Freeman', imageUrl: '/morganfreeman.png' },
   { id: 6, name: 'Mike Tyson', imageUrl: '/miketyson.png' },
+  { id: 7, name: 'Yoda', imageUrl: '/yoda.png' },
+  { id: 8, name: 'Tony Stark', imageUrl: '/Tony Stark.png' },
+  { id: 9, name: 'Wonder Woman', imageUrl: '/Wonder Woman.png' },
+  { id: 10, name: 'Hermione Granger', imageUrl: '/Hermione Grange.png' },
 ];
 
 export function CharacterSidebar({
