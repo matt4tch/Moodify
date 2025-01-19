@@ -44,7 +44,7 @@ const characters = [
 const prompt = `
 You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity.
 Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows
-the user to continue reflecting more positively on their day. Make it short. Just a few words. Make sure your response flows well with the input sentence, and connects in a way that make sense. Dont forget commas where needed. Max 5 words.
+the user to continue reflecting more positively on their day. Make it short. Just a few words. Make sure your response flows well with the input sentence, and connects in a way that make sense. Dont forget commas where needed. Max 5 words. Do not add quotation marks to the response.
 
 Examples:
 Input: "I'm having a very bad day and I"
@@ -83,7 +83,7 @@ export default function AIPromptChat() {
   } 
 
   //const debounceGetSuggestion = debounce(getSuggestion, 500, { leading: false, trailing: true });
-  const debounceGetSuggestion = useRef(debounce(getSuggestion, 1000, { leading: false, trailing: true })).current;
+  const debounceGetSuggestion = useRef(debounce(getSuggestion, 500, { leading: false, trailing: true })).current;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setInput(e.target.value);
@@ -93,7 +93,7 @@ export default function AIPromptChat() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Tab' && aiSuggestion ) {
       e.preventDefault();
-      setInput(input + aiSuggestion);
+      setInput(input + " " + aiSuggestion);
       setAiSuggestion('');
 
     } else {
