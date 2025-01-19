@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("HEROKU_POSTGRESQL_PURPLE_URL")
 }
 
 
@@ -20,7 +21,7 @@ datasource db {
 model users {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  display_name        String  
+  display_name        String    @default("Default")
   email        String      @unique
   messages    messages[]
 }
@@ -32,8 +33,10 @@ model messages {
     userId    Int
     user_prompt     String
     ai_response     String
+    selected_character    String
     day         Int
     month       Int
     year        Int
+
     @@unique([userId, day, month, year])
 }
