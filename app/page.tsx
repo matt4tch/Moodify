@@ -237,29 +237,22 @@ export default function AIPromptChat() {
         {/* Middle Section: Text Box, Submit Button, and Response Box */}
         <div className="flex flex-col w-full sm:w-2/3 lg:w-3/4">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-            <textarea
-              value={input}
-              onChange={handleInputChange}
-              placeholder="What would you like to reflect on today?"
-              className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg"
-            />
+            <div>
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                placeholder="What would you like to reflect on today?"
+                className="w-full h-[calc(100vh-12rem)] p-4 mb-4 border-2 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg bg-transparent z-50" // bg-gray-100
+              />
 
-            {aiSuggestion && input && (
-                    <div
-                      className='font-mono text-lg '
-                      style={{
-                        position: 'absolute',
-                        top: '92px',
-                        left: '382px', // Adjust for the length of the input
-                        color: 'grey',
-                        paddingLeft: '10px',
-                        paddingTop: '10px',
-                        pointerEvents: 'none', // Makes sure you can't edit the suggestion
-                      }}
-                    >
-                      {input + aiSuggestion} {/* Show suggestion after user's input */}
-                    </div>
-            )}
+              <textarea
+                      value={input+ " " + aiSuggestion}
+                      onChange={() => {}}
+                      placeholder="What would you like to reflect on today?"
+                      className="w-full h-[calc(100vh-12rem)] p-4 mb-4 bg-gray-100 border-2 text-gray-500 border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 font-mono text-lg z-0"
+                      style={{ position: 'relative', top: -653, zIndex: -1 }}
+              />
+            </div>
 
             <Button
               type="submit"
