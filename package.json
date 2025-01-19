@@ -26,6 +26,8 @@
     "react": "^19.0.0",
     "react-day-picker": "^9.5.0",
     "react-dom": "^19.0.0",
+    "react-login-page": "^1.0.4",
+    "react-modal": "^3.16.3",
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
