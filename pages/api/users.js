@@ -3,15 +3,17 @@ import prisma from '../../lib/prisma';
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { display_name, email } = body;
     
-            const newUser = await prisma.user.create({
+            console.log('test');
+            const newUser = await prisma.users.create({
                 data: {
                     display_name,
                     email,
                 }
             });
+            console.log('test2');
     
             return res.status(201).json({ user: newUser });
     
@@ -22,10 +24,10 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'GET' ) {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { userId } = body;
     
-            const user = await prisma.user.findUnique({
+            const user = await prisma.User.findUnique({
                 where: {
                     id: userId,
                 },
@@ -38,7 +40,7 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'PUT') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { userId, display_name } = body;
     
             const updatedUser = await prisma.user.update({
@@ -59,7 +61,7 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'DELETE') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { userId } = body;
     
             const deletedUser = await prisma.user.delete({

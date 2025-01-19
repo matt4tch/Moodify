@@ -101,22 +101,6 @@ export default function AIPromptChat() {
     }
    }
 
-
-  const testApiService = async () => {
-    try {
-      const response = await fetch('/api/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      console.log("Success. Here's the message data", data);
-    } catch (error) {
-      console.error('Error in API test:', error);
-    }
-  };
-
     const getMessages = async (date: Date, userId: number) => {
         try {
             const params = new URLSearchParams({
@@ -139,11 +123,6 @@ export default function AIPromptChat() {
             return null;
         }
     }
-
-
-  useEffect(() => {
-    testApiService();
-  }, []);
 
   useEffect(() => {
     if (showResponse && responseRef.current) {
