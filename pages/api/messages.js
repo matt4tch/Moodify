@@ -4,7 +4,7 @@ import prisma from '../../lib/prisma';
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { userId, user_prompt, ai_response } = body;
     
             const currentDate = new Date();
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
             const currentMonth = currentDate.getMonth() + 1;
             const currentYear = currentDate.getFullYear();
     
-            const newMessage = await prisma.message.create({
+            const newMessage = await prisma.messages.create({
                 data: {
                     day: currentDay,
                     month: currentMonth,
@@ -39,23 +39,18 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'GET') {
         try {
-            const url = 'localhost:3000/' + req.url;
-            const { searchParams } = new URL(url);
-            const currentUserId = searchParams.get('user_id');
-            const currentDay = searchParams.get('date').split('-')[1];
-            const currentMonth = searchParams.get('date').split('-')[0];
-            const currentYear = searchParams.get('year');
+            const { userId, date, year } = req.query;
+            const [currentMonth, currentDay] = date.split('-');
+            console.log(currentDay, currentMonth, year);
 
-            console.log(currentDay, currentMonth, currentYear);
-            const message = await prisma.message.findFirst({
+            const message = await prisma.messages.findFirst({
                 where: {
-                    day: currentDay,
-                    month: currentMonth,
-                    year: currentYear,
-                    userId: currentUserId,
+                    day: parseInt(currentDay),
+                    month: parseInt(currentMonth),
+                    year: parseInt(year),
+                    userId: parseInt(userId),
                 }
             });
-            console.log('message', message);
             return res.status(200).json(message);
         } catch (error) {
             return res.status(500).json({ message: 'An unexpected error occurred' });
@@ -63,10 +58,10 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'PUT') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { messageId, new_user_prompt, new_ai_response } = body;
     
-            const updatedMessage = await prisma.message.update({
+            const updatedMessage = await prisma.messages.update({
                 where: {
                     id: messageId,
                 },
@@ -84,10 +79,10 @@ export default async function handler(req, res) {
 
     } else if (req.method === 'DELETE') {
         try {
-            const body = await request.json();
+            const body = await req.body;
             const { messageId } = body;
     
-            const deletedMessage = await prisma.message.delete({
+            const deletedMessage = await prisma.messages.delete({
                 where: {
                     id: messageId,
                 },

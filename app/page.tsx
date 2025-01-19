@@ -42,19 +42,24 @@ const characters = [
 ];
 
 const prompt = `
-You are a supportive and optimistic assistant. Whenever someone types a sentence fragment, your goal is to complete it in a positive and uplifting way. Provide responses that encourage hope, motivation, and positivity.
-Your completion should only complete the sentence or add a few words to it that guide the user to reflect more positively. Do not write too much. Make sure that response allows
-the user to continue reflecting more positively on their day. Make it short. Just a few words. Make sure your response flows well with the input sentence, and connects in a way that make sense. Dont forget commas where needed. Max 5 words.
+You are a supportive and optimistic assistant. Your goal is to guide users toward positivity, hope, and motivation whenever they provide a sentence fragment. Complete the input in a way that encourages reflection, resilience, and a forward-looking mindset.
 
-Examples:
+**Instructions:**
+- Your response should complete the sentence in a way that flows naturally and makes sense contextually.
+- Keep the tone uplifting, constructive, and supportive.
+- Responses should be concise (max 5 words) and help the user reflect more positively.
+- Do not surround your response with quotation marks.
+- Ensure proper grammar and include commas where necessary.
+
+**Examples:**
 Input: "I'm having a very bad day and I"
-Output: "am trying to make it better by"
+Output: am trying to make it better by
 
 Input: "I failed my exam and now I feel like"
-Output: "I have a chance to learn from my mistakes and"
+Output: I have a chance to learn from my mistakes and
 
 Input: "I'm worried about my future and I"
-Output: "know that taking small steps today that"
+Output: know that taking small steps today that
 
 Now, complete the following sentence in a positive and supportive way:
 [Your Input]
@@ -83,7 +88,7 @@ export default function AIPromptChat() {
   } 
 
   //const debounceGetSuggestion = debounce(getSuggestion, 500, { leading: false, trailing: true });
-  const debounceGetSuggestion = useRef(debounce(getSuggestion, 1000, { leading: false, trailing: true })).current;
+  const debounceGetSuggestion = useRef(debounce(getSuggestion, 500, { leading: false, trailing: true })).current;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setInput(e.target.value);
@@ -93,29 +98,13 @@ export default function AIPromptChat() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Tab' && aiSuggestion ) {
       e.preventDefault();
-      setInput(input + aiSuggestion);
+      setInput(input + " " + aiSuggestion);
       setAiSuggestion('');
 
     } else {
       setAiSuggestion('');
     }
    }
-
-
-  const testApiService = async () => {
-    try {
-      const response = await fetch('/api/messages', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-      console.log("Success. Here's the message data", data);
-    } catch (error) {
-      console.error('Error in API test:', error);
-    }
-  };
 
     const getMessages = async (date: Date, userId: number) => {
         try {
@@ -140,11 +129,6 @@ export default function AIPromptChat() {
         }
     }
 
-
-  useEffect(() => {
-    testApiService();
-  }, []);
-
   useEffect(() => {
     if (showResponse && responseRef.current) {
       // Add a small delay to ensure the response box is rendered
@@ -156,6 +140,10 @@ export default function AIPromptChat() {
       }, 100);
     }
   }, [showResponse]);
+
+  useEffect(() => {
+      getMessages(selected, 1).then(() => console.log('SUCCESS callback'), () => console.log('FAILURE callback'));
+  }, [selected]);
 
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
