@@ -74,6 +74,7 @@ export default function AIPromptChat() {
   const [showResponse, setShowResponse] = useState(false);
   const responseRef = useRef<HTMLDivElement>(null);
   const [aiSuggestion, setAiSuggestion] = useState('');
+  const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
 
   const getSuggestion = async (text : string) => {
     if (!text) {
@@ -106,7 +107,7 @@ export default function AIPromptChat() {
     }
    }
 
-    const getMessages = async (date: Date, userId: number) => {
+    const getMessage = async (date: Date, userId: number) => {
         try {
             const params = new URLSearchParams({
                 date: `${date.getMonth() + 1}-${date.getDate()}`,
@@ -122,9 +123,20 @@ export default function AIPromptChat() {
             });
             const data = await response.json();
             console.log("Success. Here's the message data", data);
-            return data;
+
+            if (data) {
+              console.log(data["ai_response"]);
+              setAiResponse(data["ai_response"]);
+              setInput(data["user_prompt"]);
+              setShowResponse(true); // Ensure response box is displayed
+              setSummaryCharacter(selectedCharacter); // Set selected character for summary display
+            } else {
+              setShowResponse(false); // Ensure response box is displayed
+            }
+            return null;
         } catch (error) {
             console.error('Error in getMessages:', error);
+            setShowResponse(false); // Ensure response box is displayed
             return null;
         }
     }
@@ -142,7 +154,7 @@ export default function AIPromptChat() {
   }, [showResponse]);
 
   useEffect(() => {
-      getMessages(selected, 1).then(() => console.log('SUCCESS callback'), () => console.log('FAILURE callback'));
+      getMessage(selected, 1).then(() => console.log('SUCCESS callback'), () => console.log('FAILURE callback'));
   }, [selected]);
 
   const currentCharacter = characters.find(
@@ -154,8 +166,6 @@ export default function AIPromptChat() {
   );
 
   const input_context = currentCharacter?.context || "";
-
-  const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -176,7 +186,7 @@ export default function AIPromptChat() {
         setAiResponse(response); // Update with the new response
       } catch (error) {
         console.error("Error fetching AI response:", error);
-        setAiResponse("Sorry, something went wrong. Please try again."); // Error fallback
+        setAiResponse(""); // Error fallback
       }
     };
 
