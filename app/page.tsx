@@ -162,6 +162,10 @@ export default function AIPromptChat() {
     }
   }, [showResponse]);
 
+  useEffect(() => {
+      getMessages(selected, 1).then(() => console.log('SUCCESS callback'), () => console.log('FAILURE callback'));
+  }, [selected]);
+
   const currentCharacter = characters.find(
     (character) => character.name === selectedCharacter
   );
