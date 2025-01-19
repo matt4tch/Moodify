@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     } else if (req.method === 'PUT') {
         try {
             const body = await req.body;
-            const { messageId, new_user_prompt, new_ai_response } = body;
+            const { new_user_prompt, new_ai_response } = body;
     
             const updatedMessage = await prisma.messages.updateMany({
                 where: {

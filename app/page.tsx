@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef , useMemo} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { CharacterSidebar } from '../components/ui/charactersidebar';
 import { DayPicker } from 'react-day-picker';
-import { debounce, set } from 'lodash';
+import { debounce } from 'lodash';
 import "react-day-picker/style.css";
-import { setDefaultAutoSelectFamily } from 'net';
 import aiService from '../lib/aiService';
 import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -101,7 +100,6 @@ Now, complete the following sentence in a positive and supportive way:
 `;
 
 export default function AIPromptChat() {
-  const suggestionRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState<string>('');
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>('Default');
   const [summaryCharacter, setSummaryCharacter] = useState<string | null>('Default');
@@ -112,14 +110,12 @@ export default function AIPromptChat() {
   const [loginModalOpen, setLoginModalOpen] = useState(true);
   const [aiResponse, setAiResponse] = useState<string>(''); // AI response state.
   const [displayingOldMessage, setDisplayingOldMessage] = useState(false);
-  const [editing, setEditing] = useState(false);
 
-  const handleEdit = () => {
-    setEditing(true);
-    setDisplayingOldMessage(false);
-    setAiResponse('');
-    setAiSuggestion('');
-  }
+  // const handleEdit = () => {
+  //   setDisplayingOldMessage(false);
+  //   setAiResponse('');
+  //   setAiSuggestion('');
+  // }
 
   const getSuggestion = async (text : string) => {
     if (!text) {
@@ -379,7 +375,7 @@ export default function AIPromptChat() {
               />
             </div>
 
-            {(displayingOldMessage) && (<button onClick={handleEdit()}>Edit</button>) }
+            {/*{(displayingOldMessage) && (<button onClick={handleEdit()}>Edit</button>) }*/}
 
             {(!displayingOldMessage) && (<Button
               type="submit"
